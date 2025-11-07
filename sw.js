@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meu-mundo-em-simbolos-v5';
+const CACHE_NAME = 'meu-mundo-em-simbolos-v6';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',

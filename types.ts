@@ -48,9 +48,3 @@ export interface Goal {
   dateAdded: string; // ISO string
   dateCompleted?: string; // ISO string
 }
-
-// Profile Type for multi-user support
-export interface Profile {
-  id: string;
-  name: string;
-}

@@ -3,17 +3,33 @@ import { useLocalStorage } from '../hooks';
 import { Sentence, SymbolData, Goal, Session } from '../types';
 import AnalyticsDashboard from '../components/therapist/AnalyticsDashboard';
 import GoalsAndSessions from '../components/therapist/GoalsAndSessions';
+import PinLockScreen from '../components/therapist/PinLockScreen';
 
 type TherapistTab = 'analytics' | 'goals';
 
 const TherapistScreen: React.FC = () => {
     const [activeTab, setActiveTab] = useState<TherapistTab>('analytics');
+    const [isUnlocked, setIsUnlocked] = useState(false);
     
     // Data hooks from localStorage
+    const [therapistPin, setTherapistPin] = useLocalStorage<string | null>('therapistPin', null);
     const [savedPhrases] = useLocalStorage<Sentence[]>('savedPhrases', []);
     const [customSymbols] = useLocalStorage<SymbolData[]>('customSymbols', []);
     const [goals, setGoals] = useLocalStorage<Goal[]>('therapistGoals', []);
     const [sessions, setSessions] = useLocalStorage<Session[]>('therapistSessions', []);
+
+    if (!isUnlocked) {
+        return (
+            <PinLockScreen
+                storedPin={therapistPin}
+                onUnlock={() => setIsUnlocked(true)}
+                onPinSet={(newPin) => {
+                    setTherapistPin(newPin);
+                    setIsUnlocked(true);
+                }}
+            />
+        );
+    }
 
     const TabButton: React.FC<{ tabId: TherapistTab; label: string; }> = ({ tabId, label }) => (
         <button

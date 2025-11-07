@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LucideProps, Sun, Moon, Search, Plus, Trash2, Undo, Redo, Settings, X, UploadCloud, Camera, Volume2, VolumeX, Share2, Bookmark, Pencil, Smile, Zap, Users, MapPin, Box, Clock, MessageSquare, Palette, Type as TypeIcon, ClipboardList, Printer, CheckSquare, Square, Download } from 'lucide-react';
+import { LucideProps, Sun, Moon, Search, Plus, Trash2, Undo, Redo, Settings, X, UploadCloud, Camera, Volume2, VolumeX, Share2, Bookmark, Pencil, Smile, Zap, Users, MapPin, Box, Clock, MessageSquare, Palette, Type as TypeIcon, ClipboardList, Printer, CheckSquare, Square, Download, Delete } from 'lucide-react';
 
 export const icons = {
   sun: Sun,
@@ -35,6 +35,7 @@ export const icons = {
   checkSquare: CheckSquare,
   square: Square,
   download: Download,
+  backspace: Delete,
 };
 
 // FIX: Change component definition to correctly infer props from LucideProps.
