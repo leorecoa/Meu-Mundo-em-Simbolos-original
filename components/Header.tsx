@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Icon, { icons } from './common/Icon';
 import { ScreenView } from '../App';
+import { ProfileContext } from '../contexts/ProfileContext';
+import { User, LogOut } from 'lucide-react';
 
 interface HeaderProps {
     activeScreen: ScreenView;
     onScreenChange: (screen: ScreenView) => void;
+    onLogout: () => void;
 }
 
 const NavButton: React.FC<{
@@ -33,10 +36,18 @@ const NavButton: React.FC<{
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange }) => {
+const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange, onLogout }) => {
+    const { activeProfile } = useContext(ProfileContext);
+
     return (
         <header className="w-full p-2 sm:p-3 bg-surface-dark/50 backdrop-blur-lg shadow-lg flex justify-between items-center flex-shrink-0 z-10 border-b border-white/10 gap-2">
-            <h1 className="text-base sm:text-xl font-bold text-text-light flex-shrink truncate">Meu Mundo em Símbolos</h1>
+            <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-background-dark/60">
+                    <User className="text-brand-light" size={20}/>
+                    <span className="text-sm font-semibold text-text-light truncate hidden md:inline">{activeProfile?.name}</span>
+                </div>
+                <h1 className="text-base sm:text-xl font-bold text-text-light flex-shrink truncate hidden sm:block">Meu Mundo em Símbolos</h1>
+            </div>
             <nav className="flex items-center gap-1 p-1 bg-background-dark/60 rounded-xl flex-shrink-0">
                 <NavButton
                     label="Símbolos"
@@ -60,6 +71,9 @@ const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange }) => {
                     href="#/therapist"
                 />
             </nav>
+            <button onClick={onLogout} title="Trocar de Perfil" className="p-3 bg-surface-dark rounded-full shadow-lg hover:bg-gray-700 transition-all text-subtle hover:text-white">
+                <LogOut size={20} />
+            </button>
         </header>
     );
 };

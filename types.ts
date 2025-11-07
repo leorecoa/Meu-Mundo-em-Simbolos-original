@@ -42,9 +42,15 @@ export interface Session {
 }
 
 export interface Goal {
-  id: string;
+  id:string;
   text: string;
   isCompleted: boolean;
   dateAdded: string; // ISO string
   dateCompleted?: string; // ISO string
+}
+
+// Profile Type for multi-user support
+export interface Profile {
+  id: string;
+  name: string;
 }
