@@ -16,20 +16,26 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ savedPhrases, c
     }, [customSymbols]);
 
     const stats = useMemo(() => {
-        const totalPhrases = savedPhrases.length;
+        // Filter out invalid data to prevent crashes from malformed localStorage entries.
+        const validPhrases = savedPhrases.filter(p => Array.isArray(p));
+        const totalPhrases = validPhrases.length;
+
         if (totalPhrases === 0) {
             return {
                 totalPhrases: 0,
                 avgLength: 0,
                 uniqueVocab: 0,
-                // FIX: Explicitly type empty objects to ensure consistent type inference for stats.
                 categoryUsage: {} as { [key: string]: number },
                 symbolUsage: {} as { [key: string]: number },
             };
         }
         
-        const allSymbolsInPhrases = savedPhrases.flat();
-        const avgLength = allSymbolsInPhrases.length / totalPhrases;
+        // Ensure all "symbols" are valid objects before processing them.
+        const allSymbolsInPhrases = validPhrases.flat().filter(symbol => 
+            symbol && typeof symbol === 'object' && 'id' in symbol && 'name' in symbol
+        );
+
+        const avgLength = totalPhrases > 0 ? allSymbolsInPhrases.length / totalPhrases : 0;
         const uniqueVocab = new Set(allSymbolsInPhrases.map(s => s.id)).size;
 
         const categoryUsage: { [key: string]: number } = {};
@@ -37,7 +43,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ savedPhrases, c
         
         allSymbolsInPhrases.forEach(symbol => {
             const symbolInfo = allSymbols.find(s => s.id === symbol.id);
-            if(symbolInfo) {
+            if (symbolInfo) {
                 const categoryName = predefinedCategories.find(c => c.id === symbolInfo.category)?.name || 'Personalizados';
                 categoryUsage[categoryName] = (categoryUsage[categoryName] || 0) + 1;
             }

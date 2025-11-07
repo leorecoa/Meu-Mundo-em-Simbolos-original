@@ -1,5 +1,7 @@
 
+
 import React from 'react';
+// FIX: Add Backspace icon for the PIN lock screen.
 import { LucideProps, Sun, Moon, Search, Plus, Trash2, Undo, Redo, Settings, X, UploadCloud, Camera, Volume2, VolumeX, Share2, Bookmark, Pencil, Smile, Zap, Users, MapPin, Box, Clock, MessageSquare, Palette, Type as TypeIcon, ClipboardList, Printer, CheckSquare, Square, Download, Delete } from 'lucide-react';
 
 export const icons = {
@@ -19,6 +21,7 @@ export const icons = {
   share: Share2,
   bookmark: Bookmark,
   pencil: Pencil,
+  backspace: Delete,
   // Category Icons
   smile: Smile,
   zap: Zap,
@@ -35,7 +38,6 @@ export const icons = {
   checkSquare: CheckSquare,
   square: Square,
   download: Download,
-  backspace: Delete,
 };
 
 // FIX: Change component definition to correctly infer props from LucideProps.

@@ -4,9 +4,15 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Disp
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item === null) {
+          return initialValue;
+      }
+      const parsedItem = JSON.parse(item);
+      // Fallback to initialValue if the stored item is null,
+      // preventing crashes on array/object methods like .filter or .map
+      return parsedItem ?? initialValue;
     } catch (error) {
-      console.error(error);
+      console.error(`Error parsing localStorage key "${key}":`, error);
       return initialValue;
     }
   });
@@ -27,7 +33,8 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Disp
             try {
                 const newValue = e.newValue;
                 if (newValue !== null) {
-                    setStoredValue(JSON.parse(newValue));
+                    const parsedValue = JSON.parse(newValue);
+                    setStoredValue(parsedValue ?? initialValue);
                 } else {
                     setStoredValue(initialValue);
                 }
