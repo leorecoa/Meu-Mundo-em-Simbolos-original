@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Meu Mundo em Símbolos",
+  "description": "An augmentative and alternative communication (AAC) web application inspired by 'Meu Mundo em Símbolos', allowing users to build sentences with symbols.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

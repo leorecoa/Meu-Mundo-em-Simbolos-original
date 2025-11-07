@@ -1,0 +1,21 @@
+{
+  "short_name": "Símbolos",
+  "name": "Meu Mundo em Símbolos",
+  "description": "Tecnologia inclusiva para que todas as vozes sejam compreendidas.",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/src/communication/comment/materialicons/192dp/1x/baseline_comment_black_192dp.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/src/communication/comment/materialicons/512dp/1x/baseline_comment_black_512dp.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#111827",
+  "background_color": "#111827"
+}
