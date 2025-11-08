@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { SymbolData, Sentence, Symbol as SymbolType } from '../../types';
 import { categories as predefinedCategories } from '../../constants';
@@ -124,13 +125,13 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
               <button
                 key={category.id}
                 onClick={() => setActiveCategoryId(category.id)}
-                className={`group relative flex flex-col items-center justify-center gap-1 capitalize whitespace-nowrap pt-3 pb-2 px-2 sm:px-3 text-sm font-medium transition-colors w-20 sm:w-24 h-20 rounded-t-lg ${
+                className={`group relative flex flex-col items-center justify-center gap-1 capitalize whitespace-nowrap py-3 px-2 sm:px-3 text-sm font-medium transition-colors w-20 sm:w-24 rounded-t-lg ${
                     activeCategoryId === category.id
                     ? 'text-white'
                     : 'text-subtle hover:text-white'
                 }`}
               >
-                <Icon name={category.iconName as keyof typeof icons} size={28} className={`transition-transform group-hover:scale-110 ${activeCategoryId === category.id ? 'text-brand-light' : ''}`} />
+                <Icon name={category.iconName as keyof typeof icons} className={`w-6 h-6 sm:w-7 sm:h-7 transition-transform group-hover:scale-110 ${activeCategoryId === category.id ? 'text-brand-light' : ''}`} />
                 <span>{category.name}</span>
                 {activeCategoryId === category.id && (
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-brand rounded-t-full"></div>
@@ -142,7 +143,7 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
       
       {/* Search Bar */}
       {activeCategoryId !== 'frases' && (
-        <div className="p-2 sm:p-4 border-b border-gray-700">
+        <div className="p-2 sm:p-3 border-b border-gray-700">
           <div className="relative">
             <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle" size={20} />
             <input

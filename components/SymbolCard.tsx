@@ -13,12 +13,12 @@ const SymbolCard: React.FC<SymbolCardProps> = ({ symbol, onClick, onEdit, onDele
   return (
     <div
       onClick={() => onClick(symbol)}
-      className={`group relative flex flex-col items-center justify-center gap-1 sm:gap-2 text-center bg-surface-light dark:bg-surface-dark shadow-lg hover:shadow-primary/50 hover:scale-105 transition-all duration-200 cursor-pointer aspect-square p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 border-transparent hover:border-primary-light`}
+      className={`group relative flex flex-col items-center justify-center gap-1 text-center bg-surface-light dark:bg-surface-dark shadow-lg hover:shadow-primary/50 hover:scale-105 transition-all duration-200 cursor-pointer aspect-square p-1 sm:p-2 rounded-lg sm:rounded-xl border-2 border-transparent hover:border-primary-light`}
     >
       {symbol.imageUrl ? (
         <img src={symbol.imageUrl} alt={symbol.name} className="w-full h-full object-cover rounded-md" />
       ) : (
-        <span className="text-3xl sm:text-4xl md:text-5xl">{symbol.emoji}</span>
+        <span className="text-2xl sm:text-3xl md:text-4xl">{symbol.emoji}</span>
       )}
       <span className={`font-medium text-text-light dark:text-text-dark text-xs sm:text-sm`}>{symbol.name}</span>
 

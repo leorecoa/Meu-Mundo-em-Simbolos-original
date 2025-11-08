@@ -43,9 +43,9 @@ const PhraseBuilder: React.FC<PhraseBuilderProps> = (props) => {
   const canPerformActions = sentence.length > 0;
 
   return (
-    <div className="bg-surface-dark/50 p-4 sm:p-6 rounded-2xl shadow-lg animate-fadeIn flex flex-col gap-4 h-full">
+    <div className="bg-surface-dark/50 p-3 sm:p-4 rounded-2xl shadow-lg animate-fadeIn flex flex-col gap-3 h-full">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg sm:text-xl font-semibold text-text-light dark:text-text-dark">Construtor de Frases</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-text-light dark:text-text-dark">Construtor de Frases</h2>
         <button
             onClick={onSavePhrase}
             disabled={!canSave}
@@ -58,7 +58,7 @@ const PhraseBuilder: React.FC<PhraseBuilderProps> = (props) => {
       </div>
       
       {/* Sentence as Text */}
-      <div className="w-full bg-background-dark shadow-inner rounded-lg p-3 min-h-[48px] flex items-center text-base sm:text-lg text-text-dark">
+      <div className="w-full bg-background-dark shadow-inner rounded-lg p-3 min-h-[40px] flex items-center text-sm sm:text-base text-text-dark">
         <p className={sentence.length === 0 ? 'text-subtle-dark' : ''}>
           {sentenceText || 'Sua frase aparecerá aqui...'}
         </p>
