@@ -119,19 +119,19 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
     <div className="h-full bg-surface-dark/50 rounded-2xl shadow-lg overflow-hidden flex flex-col">
       {/* Category Tabs */}
       <div className="border-b border-gray-700">
-        <div className="flex gap-1 sm:gap-2 px-2 sm:px-4 overflow-x-auto" aria-label="Tabs">
+        <div className="flex gap-2 px-2 overflow-x-auto" aria-label="Tabs">
           {allCategories.map((category) => (
               (category.id !== 'frases' || savedPhrases.length > 0) &&
               <button
                 key={category.id}
                 onClick={() => setActiveCategoryId(category.id)}
-                className={`group relative flex flex-col items-center justify-center gap-1 capitalize whitespace-nowrap py-3 px-2 sm:px-3 text-sm font-medium transition-colors w-20 sm:w-24 rounded-t-lg ${
+                className={`group relative flex flex-col items-center justify-center flex-shrink-0 gap-1 capitalize whitespace-nowrap px-3 py-2 text-xs font-medium transition-colors rounded-t-lg min-w-[72px] ${
                     activeCategoryId === category.id
                     ? 'text-white'
                     : 'text-subtle hover:text-white'
                 }`}
               >
-                <Icon name={category.iconName as keyof typeof icons} className={`w-6 h-6 sm:w-7 sm:h-7 transition-transform group-hover:scale-110 ${activeCategoryId === category.id ? 'text-brand-light' : ''}`} />
+                <Icon name={category.iconName as keyof typeof icons} className={`w-5 h-5 transition-transform group-hover:scale-110 ${activeCategoryId === category.id ? 'text-brand-light' : ''}`} />
                 <span>{category.name}</span>
                 {activeCategoryId === category.id && (
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-brand rounded-t-full"></div>

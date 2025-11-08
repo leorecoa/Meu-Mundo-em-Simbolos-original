@@ -47,11 +47,11 @@ const SentenceStrip: React.FC<SentenceStripProps> = ({ sentence, onRemoveSymbol,
   };
 
   return (
-    <div className="w-full bg-background-light dark:bg-background-dark shadow-inner rounded-xl p-2 sm:p-3 min-h-[84px] sm:min-h-[108px] flex items-center" onDragOver={handleDragOver}>
+    <div className="w-full bg-background-light dark:bg-background-dark shadow-inner rounded-xl p-2 sm:p-3 min-h-[80px] sm:min-h-[96px] flex items-center" onDragOver={handleDragOver}>
       {sentence.length === 0 ? (
         <p className="w-full text-center text-subtle-light dark:text-subtle-dark">Toque nos símbolos para formar uma frase...</p>
       ) : (
-        <div className="flex flex-wrap gap-2 sm:gap-4">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {sentence.map((symbol, index) => {
             const isSpeaking = index === speakingIndex;
             const isBeingDragged = dragging && dragItem.current === index;
@@ -68,13 +68,13 @@ const SentenceStrip: React.FC<SentenceStripProps> = ({ sentence, onRemoveSymbol,
                     onDragEnd={handleDragEnd}
                     onDrop={handleDrop}
                 >
-                    <div className={`flex flex-col items-center justify-center gap-1 text-center bg-surface-light dark:bg-surface-dark p-1 sm:p-2 rounded-lg shadow transition-all duration-300
+                    <div className={`flex flex-col items-center justify-center gap-1 text-center bg-surface-light dark:bg-surface-dark p-1 rounded-lg shadow transition-all duration-300
                       ${isSpeaking ? 'ring-2 ring-green-500 scale-110' : ''}
                       ${isBeingDragged ? 'opacity-30 scale-95' : 'opacity-100'}
                       ${isDragTarget ? 'ring-2 ring-primary-light ring-offset-2 ring-offset-background-dark' : ''}
                     `}>
-                        <span className="text-2xl sm:text-3xl h-8 sm:h-10 flex items-center justify-center pointer-events-none">{symbol.imageUrl ? <img src={symbol.imageUrl} alt={symbol.name} className="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded"/> : symbol.emoji}</span>
-                        <span className="text-xs font-medium text-text-light dark:text-text-dark w-16 truncate pointer-events-none">{symbol.name}</span>
+                        <span className="text-2xl h-8 flex items-center justify-center pointer-events-none">{symbol.imageUrl ? <img src={symbol.imageUrl} alt={symbol.name} className="w-8 h-8 object-cover rounded"/> : symbol.emoji}</span>
+                        <span className="text-xs font-medium text-text-light dark:text-text-dark w-14 truncate pointer-events-none">{symbol.name}</span>
                     </div>
                     <button
                         onClick={() => onRemoveSymbol(index)}
