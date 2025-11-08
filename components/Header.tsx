@@ -5,6 +5,7 @@ import { ScreenView } from '../App';
 interface HeaderProps {
     activeScreen: ScreenView;
     onScreenChange: (screen: ScreenView) => void;
+    onOpenSettings: () => void;
 }
 
 const NavButton: React.FC<{
@@ -33,10 +34,15 @@ const NavButton: React.FC<{
     );
 };
 
-const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange }) => {
+const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange, onOpenSettings }) => {
     return (
         <header className="w-full p-2 sm:p-3 bg-surface-dark/50 backdrop-blur-lg shadow-lg flex justify-between items-center flex-shrink-0 z-10 border-b border-white/10 gap-2">
-            <h1 className="text-lg sm:text-xl font-bold text-text-light truncate">Meu Mundo em Símbolos</h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-lg sm:text-xl font-bold text-text-light truncate">Meu Mundo em Símbolos</h1>
+              <button onClick={onOpenSettings} aria-label="Abrir Configurações" className="text-subtle hover:text-white transition-colors">
+                  <Icon name="settings" size={24} />
+              </button>
+            </div>
             <nav className="flex items-center gap-1 p-1 bg-background-dark/60 rounded-xl flex-shrink-0">
                 <NavButton
                     label="Símbolos"

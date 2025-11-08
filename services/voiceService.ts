@@ -1,5 +1,5 @@
 
-import { SymbolData } from '../types';
+import { SymbolData, VoiceSettings } from '../types';
 
 export class VoiceService {
   private static instance: VoiceService;
@@ -18,7 +18,8 @@ export class VoiceService {
 
   speak(
     sentenceSymbols: SymbolData[],
-    onBoundary: (symbolIndex: number) => void
+    onBoundary: (symbolIndex: number) => void,
+    settings?: VoiceSettings
   ): Promise<void> {
     if (this.isSpeaking()) {
       this.stop();
@@ -34,8 +35,8 @@ export class VoiceService {
 
       this.utterance = new SpeechSynthesisUtterance(sentenceText);
       this.utterance.lang = 'pt-BR';
-      this.utterance.pitch = 1.0;
-      this.utterance.rate = 0.9;
+      this.utterance.pitch = settings?.pitch ?? 1.0;
+      this.utterance.rate = settings?.rate ?? 0.9;
       this.utterance.volume = 1.0;
       
       this.utterance.onend = () => {
@@ -79,7 +80,8 @@ export class VoiceService {
   speakText(
     text: string,
     onBoundary: (wordIndex: number) => void,
-    onEnd: () => void
+    onEnd: () => void,
+    settings?: VoiceSettings
   ): Promise<void> {
     if (this.isSpeaking()) {
       this.stop();
@@ -93,8 +95,8 @@ export class VoiceService {
 
       this.utterance = new SpeechSynthesisUtterance(text);
       this.utterance.lang = 'pt-BR';
-      this.utterance.pitch = 1.0;
-      this.utterance.rate = 0.9;
+      this.utterance.pitch = settings?.pitch ?? 1.0;
+      this.utterance.rate = settings?.rate ?? 0.9;
       this.utterance.volume = 1.0;
       
       this.utterance.onend = () => {

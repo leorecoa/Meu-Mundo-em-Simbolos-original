@@ -1,12 +1,13 @@
-
-
-import React, { useState, useCallback, useReducer, useEffect, useMemo } from 'react';
-import { SymbolData, Sentence, History } from '../types';
+import React, { useState, useCallback, useReducer, useEffect } from 'react';
+import { SymbolData, Sentence, History, VoiceSettings } from '../types';
 import { VoiceService } from '../services/voiceService';
 import PhraseBuilder from '../components/PhraseBuilder';
 import SymbolKeyboard from '../components/keyboard/SymbolKeyboard';
 import EditSymbolModal from '../components/modals/EditSymbolModal';
 import { useLocalStorage } from '../hooks';
+import OnboardingGuide from '../components/OnboardingGuide';
+import ConfirmationModal from '../components/modals/ConfirmationModal';
+import Toast from '../components/common/Toast';
 
 // Reducer for sentence history (undo/redo)
 const historyReducer = (state: History, action: { type: 'add' | 'undo' | 'redo', payload?: Sentence }): History => {
@@ -40,7 +41,11 @@ const historyReducer = (state: History, action: { type: 'add' | 'undo' | 'redo',
   }
 };
 
-const SentenceEditorScreen: React.FC = () => {
+interface SentenceEditorScreenProps {
+    voiceSettings: VoiceSettings;
+}
+
+const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettings }) => {
     const [history, dispatchHistory] = useReducer(historyReducer, { past: [[]], future: [] });
     const sentence = history.past[history.past.length - 1];
 
@@ -51,6 +56,30 @@ const SentenceEditorScreen: React.FC = () => {
     const [customSymbols, setCustomSymbols] = useLocalStorage<SymbolData[]>('customSymbols', []);
     const [savedPhrases, setSavedPhrases] = useLocalStorage<Sentence[]>('savedPhrases', []);
     const [editingSymbol, setEditingSymbol] = useState<SymbolData | null>(null);
+    const [showOnboarding, setShowOnboarding] = useState(false);
+    
+    const [toastMessage, setToastMessage] = useState('');
+    const [confirmAction, setConfirmAction] = useState<{ action: () => void; title: string; message: string } | null>(null);
+
+    useEffect(() => {
+        try {
+            const hasVisited = window.localStorage.getItem('hasVisitedBefore');
+            if (hasVisited !== 'true') {
+                setShowOnboarding(true);
+            }
+        } catch (error) {
+            console.error("Could not access localStorage:", error);
+        }
+    }, []);
+
+    const handleCloseOnboarding = () => {
+        try {
+            window.localStorage.setItem('hasVisitedBefore', 'true');
+        } catch (error) {
+            console.error("Could not write to localStorage:", error);
+        }
+        setShowOnboarding(false);
+    };
 
     const updateSentence = (newSentence: Sentence) => {
         dispatchHistory({ type: 'add', payload: newSentence });
@@ -82,14 +111,14 @@ const SentenceEditorScreen: React.FC = () => {
             setSpeakingIndex(-1);
         } else if (sentence.length > 0) {
             setIsSpeaking(true);
-            voiceService.speak(sentence, (index) => setSpeakingIndex(index))
+            voiceService.speak(sentence, (index) => setSpeakingIndex(index), voiceSettings)
             .catch(err => console.error("Speech error:", err))
             .finally(() => {
                 setIsSpeaking(false);
                 setSpeakingIndex(-1);
             });
         }
-    }, [sentence, voiceService, isSpeaking]);
+    }, [sentence, voiceService, isSpeaking, voiceSettings]);
     
     const handleAddCustomSymbol = (name: string, imageBase64: string) => {
         const newSymbol: SymbolData = {
@@ -102,10 +131,18 @@ const SentenceEditorScreen: React.FC = () => {
             speechText: name,
         };
         setCustomSymbols(prev => [...prev, newSymbol]);
+        setToastMessage('Símbolo adicionado!');
     };
     
     const handleDeleteCustomSymbol = (symbolToDelete: SymbolData) => {
-        setCustomSymbols(prev => prev.filter(s => s.id !== symbolToDelete.id));
+        setConfirmAction({
+            action: () => {
+                setCustomSymbols(prev => prev.filter(s => s.id !== symbolToDelete.id));
+                setToastMessage('Símbolo deletado.');
+            },
+            title: 'Deletar Símbolo',
+            message: `Você tem certeza que quer deletar o símbolo "${symbolToDelete.name}"? Esta ação não pode ser desfeita.`
+        });
     };
 
     const handleOpenEditModal = (symbolToEdit: SymbolData) => {
@@ -115,6 +152,7 @@ const SentenceEditorScreen: React.FC = () => {
     const handleSaveEditedSymbol = (updatedSymbol: SymbolData) => {
         setCustomSymbols(prev => prev.map(s => s.id === updatedSymbol.id ? updatedSymbol : s));
         setEditingSymbol(null);
+        setToastMessage('Símbolo atualizado.');
     };
 
     const handleSavePhrase = () => {
@@ -123,6 +161,9 @@ const SentenceEditorScreen: React.FC = () => {
             const isDuplicate = savedPhrases.some(p => JSON.stringify(p.map(({id, name}) => ({id, name}))) === sentenceString);
             if (!isDuplicate) {
                 setSavedPhrases(prev => [sentence, ...prev]);
+                setToastMessage('Frase salva!');
+            } else {
+                setToastMessage('Esta frase já foi salva.');
             }
         }
     };
@@ -132,11 +173,31 @@ const SentenceEditorScreen: React.FC = () => {
     };
     
     const handleDeleteSavedPhrase = (index: number) => {
-        setSavedPhrases(prev => prev.filter((_, i) => i !== index));
+        const phraseToDelete = savedPhrases[index];
+        const phraseText = phraseToDelete.map(s => s.name).join(' ');
+        setConfirmAction({
+            action: () => {
+                setSavedPhrases(prev => prev.filter((_, i) => i !== index));
+                setToastMessage('Frase deletada.');
+            },
+            title: 'Deletar Frase',
+            message: `Você tem certeza que quer deletar a frase "${phraseText}"?`
+        });
     };
 
     return (
         <div className="flex flex-col lg:flex-row h-full p-2 sm:p-4 gap-4 font-sans">
+            <Toast message={toastMessage} onClose={() => setToastMessage('')} />
+            {showOnboarding && <OnboardingGuide onClose={handleCloseOnboarding} />}
+            {confirmAction && (
+                <ConfirmationModal 
+                    isOpen={!!confirmAction}
+                    onClose={() => setConfirmAction(null)}
+                    onConfirm={confirmAction.action}
+                    title={confirmAction.title}
+                    message={confirmAction.message}
+                />
+            )}
             {/* Left side: Phrase Builder */}
             <div className="lg:w-1/2 flex flex-col min-h-0">
                 <PhraseBuilder

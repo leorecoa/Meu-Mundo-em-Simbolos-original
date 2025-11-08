@@ -1,7 +1,19 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+
+// Global error handler to catch unhandled exceptions
+window.onerror = function(message, source, lineno, colno, error) {
+  console.error("Uncaught error:", {
+    message,
+    source,
+    lineno,
+    colno,
+    error
+  });
+  // This can be expanded to send errors to a logging service
+  return true; // Prevents the default browser error handling
+};
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

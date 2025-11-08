@@ -29,22 +29,22 @@
                 dark: '#C026D3',
               },
               background: {
-                light: '#111827', // Forcing dark theme as default
+                light: '#F9FAFB',
                 DEFAULT: '#111827',
                 dark: '#030712',
               },
               surface: {
-                light: '#1f2937',
+                light: '#FFFFFF',
                 DEFAULT: '#1f2937',
                 dark: '#111827',
               },
               text: {
-                light: '#F9FAFB',
+                light: '#1F2937',
                 DEFAULT: '#F9FAFB',
                 dark: '#E5E7EB',
               },
               subtle: {
-                light: '#9CA3AF',
+                light: '#6B7280',
                 DEFAULT: '#9CA3AF',
                 dark: '#6B7280',
               }
@@ -53,6 +53,10 @@
               fadeIn: {
                 '0%': { opacity: '0' },
                 '100%': { opacity: '1' },
+              },
+              fadeOut: {
+                '0%': { opacity: '1' },
+                '100%': { opacity: '0' },
               },
               slideInUp: {
                 '0%': { transform: 'translateY(20px)', opacity: '0' },
@@ -77,6 +81,7 @@
             },
             animation: {
               fadeIn: 'fadeIn 0.5s ease-in-out forwards',
+              fadeOut: 'fadeOut 0.5s ease-in-out forwards',
               slideInUp: 'slideInUp 0.5s ease-out',
               assemble: 'assemble 0.6s ease-out forwards',
               'pulse-glow': 'pulseGlow 2.5s ease-in-out infinite',
@@ -97,13 +102,13 @@
 }
 </script>
 </head>
-  <body class="bg-background-dark text-text-dark bg-gradient-to-br from-gray-900 via-background-dark to-gray-900">
+  <body class="bg-background-light dark:bg-background-dark">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js').then(registration => {
+          navigator.serviceWorker.register('/sw.js').then(registration => {
             console.log('SW registered: ', registration);
           }).catch(registrationError => {
             console.log('SW registration failed: ', registrationError);

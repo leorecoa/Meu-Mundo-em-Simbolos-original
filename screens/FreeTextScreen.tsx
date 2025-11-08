@@ -1,9 +1,15 @@
 
+
 import React, { useState, useCallback } from 'react';
 import { VoiceService } from '../services/voiceService';
 import Icon from '../components/common/Icon';
+import { VoiceSettings } from '../types';
 
-const FreeTextScreen: React.FC = () => {
+interface FreeTextScreenProps {
+    voiceSettings: VoiceSettings;
+}
+
+const FreeTextScreen: React.FC<FreeTextScreenProps> = ({ voiceSettings }) => {
     const [text, setText] = useState('');
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [speakingWordIndex, setSpeakingWordIndex] = useState(-1);
@@ -19,14 +25,15 @@ const FreeTextScreen: React.FC = () => {
             voiceService.speakText(
                 text, 
                 (index) => setSpeakingWordIndex(index),
-                () => setIsSpeaking(false)
+                () => setIsSpeaking(false),
+                voiceSettings
             ).catch(err => {
                 console.error("Speech error:", err);
                 setIsSpeaking(false);
                 setSpeakingWordIndex(-1);
             });
         }
-    }, [text, isSpeaking, voiceService]);
+    }, [text, isSpeaking, voiceService, voiceSettings]);
 
     const handleClear = () => {
         setText('');

@@ -16,6 +16,7 @@ export type History = {
 };
 
 export type Theme = 'light' | 'dark';
+export type FontSize = 'sm' | 'md' | 'lg';
 
 // Types for potential future refactoring with nested categories
 export interface Symbol {
@@ -47,4 +48,22 @@ export interface Goal {
   isCompleted: boolean;
   dateAdded: string; // ISO string
   dateCompleted?: string; // ISO string
+}
+
+export interface VoiceSettings {
+  rate: number;
+  pitch: number;
+}
+
+export interface AppearanceSettings {
+  theme: Theme;
+  fontSize: FontSize;
+}
+
+// Data structure for backup files
+export interface BackupData {
+  customSymbols: SymbolData[];
+  savedPhrases: Sentence[];
+  therapistGoals: Goal[];
+  therapistSessions: Session[];
 }

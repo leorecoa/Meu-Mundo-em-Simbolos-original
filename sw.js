@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meu-mundo-em-simbolos-v7';
+const CACHE_NAME = 'meu-mundo-em-simbolos-v9';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',
@@ -9,13 +9,17 @@ const URLS_TO_CACHE = [
   '/types.ts',
   '/metadata.json',
   '/components/common/Icon.tsx',
+  '/components/common/Toast.tsx',
   '/components/keyboard/AddCustomSymbol.tsx',
   '/components/keyboard/CategoryTabs.tsx',
   '/components/keyboard/RecentSymbols.tsx',
   '/components/keyboard/SavedPhrases.tsx',
   '/components/keyboard/SymbolGrid.tsx',
   '/components/keyboard/SymbolKeyboard.tsx',
+  '/components/modals/ConfirmationModal.tsx',
   '/components/modals/EditSymbolModal.tsx',
+  '/components/modals/SettingsModal.tsx',
+  '/components/OnboardingGuide.tsx',
   '/components/Header.tsx',
   '/components/PhraseBuilder.tsx',
   '/components/SentenceStrip.tsx',
