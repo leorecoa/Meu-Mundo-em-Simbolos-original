@@ -18,6 +18,7 @@ const URLS_TO_CACHE = [
   '/components/keyboard/SymbolKeyboard.tsx',
   '/components/modals/ConfirmationModal.tsx',
   '/components/modals/EditSymbolModal.tsx',
+  '/components/modals/RecentPhrasesModal.tsx',
   '/components/modals/SettingsModal.tsx',
   '/components/OnboardingGuide.tsx',
   '/components/Header.tsx',

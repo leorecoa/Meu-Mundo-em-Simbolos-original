@@ -8,6 +8,7 @@ import { useLocalStorage } from '../hooks';
 import OnboardingGuide from '../components/OnboardingGuide';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
 import Toast from '../components/common/Toast';
+import RecentPhrasesModal from '../components/modals/RecentPhrasesModal';
 
 // Reducer for sentence history (undo/redo)
 const historyReducer = (state: History, action: { type: 'add' | 'undo' | 'redo', payload?: Sentence }): History => {
@@ -55,6 +56,9 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
     
     const [customSymbols, setCustomSymbols] = useLocalStorage<SymbolData[]>('customSymbols', []);
     const [savedPhrases, setSavedPhrases] = useLocalStorage<Sentence[]>('savedPhrases', []);
+    const [recentPhrases, setRecentPhrases] = useLocalStorage<Sentence[]>('recentPhrasesHistory', []);
+    const [isRecentPhrasesModalOpen, setIsRecentPhrasesModalOpen] = useState(false);
+
     const [editingSymbol, setEditingSymbol] = useState<SymbolData | null>(null);
     const [showOnboarding, setShowOnboarding] = useState(false);
     
@@ -71,6 +75,32 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
             console.error("Could not access localStorage:", error);
         }
     }, []);
+
+    useEffect(() => {
+      // This effect runs once on mount to clean up any bad data from previous sessions.
+      const cleanSymbols = Array.isArray(customSymbols)
+        ? customSymbols.filter(s => s && typeof s === 'object' && s.id && s.name && typeof s.name === 'string')
+        : [];
+      
+      if (!Array.isArray(customSymbols) || cleanSymbols.length !== customSymbols.length) {
+        console.warn('Malformed or invalid custom symbols data found in localStorage. Cleaning up.');
+        setCustomSymbols(cleanSymbols);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Run only on mount to prevent re-triggering.
+    
+    const addPhraseToHistory = useCallback((phraseToAdd: Sentence) => {
+        if (!phraseToAdd || phraseToAdd.length === 0) return;
+
+        setRecentPhrases(prev => {
+            const phraseString = JSON.stringify(phraseToAdd.map(s => s.id));
+            if (prev.length > 0 && JSON.stringify(prev[0].map(s => s.id)) === phraseString) {
+                return prev;
+            }
+            const newHistory = [phraseToAdd, ...prev];
+            return newHistory.slice(0, 15);
+        });
+    }, [setRecentPhrases]);
 
     const handleCloseOnboarding = () => {
         try {
@@ -100,7 +130,12 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
         updateSentence(newSentence);
     };
 
-    const handleClearSentence = () => updateSentence([]);
+    const handleClearSentence = () => {
+        if (sentence.length > 0) {
+            addPhraseToHistory(sentence);
+        }
+        updateSentence([]);
+    };
     const handleUndo = () => dispatchHistory({ type: 'undo' });
     const handleRedo = () => dispatchHistory({ type: 'redo' });
 
@@ -110,6 +145,7 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
             setIsSpeaking(false);
             setSpeakingIndex(-1);
         } else if (sentence.length > 0) {
+            addPhraseToHistory(sentence);
             setIsSpeaking(true);
             voiceService.speak(sentence, (index) => setSpeakingIndex(index), voiceSettings)
             .catch(err => console.error("Speech error:", err))
@@ -118,7 +154,7 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
                 setSpeakingIndex(-1);
             });
         }
-    }, [sentence, voiceService, isSpeaking, voiceSettings]);
+    }, [sentence, voiceService, isSpeaking, voiceSettings, addPhraseToHistory]);
     
     const handleAddCustomSymbol = (name: string, imageBase64: string) => {
         const newSymbol: SymbolData = {
@@ -154,9 +190,20 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
         setEditingSymbol(null);
         setToastMessage('Símbolo atualizado.');
     };
+    
+    const handleReorderCustomSymbol = (fromIndex: number, toIndex: number) => {
+        setCustomSymbols(prevSymbols => {
+            const newSymbols = [...prevSymbols];
+            const [moved] = newSymbols.splice(fromIndex, 1);
+            newSymbols.splice(toIndex, 0, moved);
+            return newSymbols;
+        });
+        setToastMessage('Ordem dos símbolos atualizada.');
+    };
 
     const handleSavePhrase = () => {
         if (sentence.length > 0) {
+            addPhraseToHistory(sentence);
             const sentenceString = JSON.stringify(sentence.map(({id, name}) => ({id, name})));
             const isDuplicate = savedPhrases.some(p => JSON.stringify(p.map(({id, name}) => ({id, name}))) === sentenceString);
             if (!isDuplicate) {
@@ -182,6 +229,23 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
             },
             title: 'Deletar Frase',
             message: `Você tem certeza que quer deletar a frase "${phraseText}"?`
+        });
+    };
+
+    const handleSelectRecentPhrase = (phrase: Sentence) => {
+        updateSentence(phrase);
+        setIsRecentPhrasesModalOpen(false);
+    };
+
+    const handleClearHistory = () => {
+        setConfirmAction({
+            action: () => {
+                setRecentPhrases([]);
+                setToastMessage('Histórico de frases recentes limpo.');
+                setIsRecentPhrasesModalOpen(false);
+            },
+            title: 'Limpar Histórico',
+            message: 'Você tem certeza que quer limpar todo o histórico de frases recentes? Esta ação não pode ser desfeita.'
         });
     };
 
@@ -214,6 +278,7 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
                     isSpeaking={isSpeaking}
                     onSavePhrase={handleSavePhrase}
                     canSave={sentence.length > 0}
+                    onOpenHistory={() => setIsRecentPhrasesModalOpen(true)}
                 />
             </div>
 
@@ -225,6 +290,7 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
                     onAddCustomSymbol={handleAddCustomSymbol}
                     onDeleteCustomSymbol={handleDeleteCustomSymbol}
                     onEditCustomSymbol={handleOpenEditModal}
+                    onReorderCustomSymbol={handleReorderCustomSymbol}
                     savedPhrases={savedPhrases}
                     onSelectSavedPhrase={handleSelectSavedPhrase}
                     onDeleteSavedPhrase={handleDeleteSavedPhrase}
@@ -238,6 +304,13 @@ const SentenceEditorScreen: React.FC<SentenceEditorScreenProps> = ({ voiceSettin
                     onSave={handleSaveEditedSymbol}
                 />
             )}
+            <RecentPhrasesModal
+                isOpen={isRecentPhrasesModalOpen}
+                onClose={() => setIsRecentPhrasesModalOpen(false)}
+                phrases={recentPhrases}
+                onSelectPhrase={handleSelectRecentPhrase}
+                onClearHistory={handleClearHistory}
+            />
         </div>
     );
 };

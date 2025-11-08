@@ -12,7 +12,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ savedPhrases, c
     
     const allSymbols = useMemo(() => {
         const defaultSymbols = predefinedCategories.flatMap(cat => cat.symbols.map(s => ({...s, id: s.id, name: s.name, emoji: s.icon, category: s.category} as SymbolData)));
-        return [...defaultSymbols, ...customSymbols];
+        return [...defaultSymbols, ...customSymbols.filter(Boolean)];
     }, [customSymbols]);
 
     const stats = useMemo(() => {
@@ -42,7 +42,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ savedPhrases, c
         const symbolUsage: { [key: string]: number } = {};
         
         allSymbolsInPhrases.forEach(symbol => {
-            const symbolInfo = allSymbols.find(s => s.id === symbol.id);
+            const symbolInfo = allSymbols.find(s => s && s.id === symbol.id);
             if (symbolInfo) {
                 const categoryName = predefinedCategories.find(c => c.id === symbolInfo.category)?.name || 'Personalizados';
                 categoryUsage[categoryName] = (categoryUsage[categoryName] || 0) + 1;

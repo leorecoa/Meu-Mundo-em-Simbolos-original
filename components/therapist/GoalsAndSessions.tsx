@@ -45,8 +45,8 @@ const GoalsAndSessions: React.FC<GoalsAndSessionsProps> = ({ goals, setGoals, se
         setSessionDuration('');
     };
     
-    const activeGoals = goals.filter(g => !g.isCompleted);
-    const completedGoals = goals.filter(g => g.isCompleted);
+    const activeGoals = goals.filter(g => g && !g.isCompleted);
+    const completedGoals = goals.filter(g => g && g.isCompleted);
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-text-dark">
@@ -103,7 +103,7 @@ const GoalsAndSessions: React.FC<GoalsAndSessionsProps> = ({ goals, setGoals, se
                     </div>
                 </div>
                 <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                     {sessions.length > 0 ? sessions.map(session => (
+                     {sessions.length > 0 ? sessions.filter(Boolean).map(session => (
                         <div key={session.id} className="bg-background-dark p-3 rounded-lg">
                             <div className="flex justify-between items-center text-sm mb-1">
                                 <span className="font-bold text-text-light">{new Date(session.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</span>

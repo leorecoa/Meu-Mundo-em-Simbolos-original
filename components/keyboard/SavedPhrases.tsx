@@ -17,7 +17,9 @@ const SavedPhrases: React.FC<SavedPhrasesProps> = ({ phrases, onSelect, onDelete
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {phrases.map((phrase, index) => (
+          {phrases.map((phrase, index) => {
+            if (!Array.isArray(phrase)) return null;
+            return (
             <div 
                 key={index} 
                 className="relative group bg-background-light dark:bg-background-dark rounded-lg shadow p-4 transition-all hover:shadow-lg flex flex-col justify-between"
@@ -46,7 +48,7 @@ const SavedPhrases: React.FC<SavedPhrasesProps> = ({ phrases, onSelect, onDelete
                 <Icon name="trash" size={14} />
               </button>
             </div>
-          ))}
+          )})}
         </div>
       )}
     </div>

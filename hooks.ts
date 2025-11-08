@@ -8,8 +8,21 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Disp
           return initialValue;
       }
       const parsedItem = JSON.parse(item);
-      // Fallback to initialValue if the stored item is null,
-      // preventing crashes on array/object methods like .filter or .map
+      
+      // If initial value is an array, ensure the stored value is also an array.
+      if (Array.isArray(initialValue)) {
+        if(Array.isArray(parsedItem)) {
+            return parsedItem;
+        }
+        console.warn(`Data for key "${key}" in localStorage is not an array. Resetting to default.`);
+        return initialValue;
+      }
+
+      // If it's an object, merge the stored value with the initial value to ensure all properties exist.
+      if (typeof initialValue === 'object' && initialValue !== null && typeof parsedItem === 'object' && parsedItem !== null) {
+          return { ...initialValue, ...parsedItem };
+      }
+
       return parsedItem ?? initialValue;
     } catch (error) {
       console.error(`Error parsing localStorage key "${key}":`, error);
@@ -31,13 +44,32 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Disp
     const handleStorageChange = (e: StorageEvent) => {
         if (e.key === key) {
             try {
-                const newValue = e.newValue;
-                if (newValue !== null) {
-                    const parsedValue = JSON.parse(newValue);
-                    setStoredValue(parsedValue ?? initialValue);
-                } else {
+                if (e.newValue === null) {
                     setStoredValue(initialValue);
+                    return;
                 }
+
+                const parsedValue = JSON.parse(e.newValue);
+                
+                if (Array.isArray(initialValue)) {
+                    if (Array.isArray(parsedValue)) {
+                        // FIX: Cast parsedValue to T to match the state's generic type.
+                        setStoredValue(parsedValue as T);
+                        return;
+                    }
+                    console.warn(`Data for key "${key}" in localStorage is not an array during storage event. Resetting to default.`);
+                    setStoredValue(initialValue);
+                    return;
+                }
+                
+                if (typeof initialValue === 'object' && initialValue !== null && typeof parsedValue === 'object' && parsedValue !== null) {
+                    // FIX: Cast the merged object to T to match the state's generic type.
+                    setStoredValue({ ...initialValue, ...parsedValue } as T);
+                    return;
+                }
+
+                // FIX: Cast the parsed value to T to match the state's generic type.
+                setStoredValue((parsedValue ?? initialValue) as T);
             } catch (error) {
                 console.error(error);
                 setStoredValue(initialValue);

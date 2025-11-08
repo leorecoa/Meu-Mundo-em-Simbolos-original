@@ -1,7 +1,6 @@
 
-
 import React, { useState, useMemo, useEffect } from 'react';
-import { SymbolData, Sentence, Symbol as SymbolType } from '../../types';
+import { SymbolData, Sentence } from '../../types';
 import { categories as predefinedCategories } from '../../constants';
 import SymbolGrid from './SymbolGrid';
 import RecentSymbols from './RecentSymbols';
@@ -15,10 +14,18 @@ interface SymbolKeyboardProps {
   onAddCustomSymbol: (name: string, imageBase64: string) => void;
   onEditCustomSymbol: (symbol: SymbolData) => void;
   onDeleteCustomSymbol: (symbol: SymbolData) => void;
+  onReorderCustomSymbol: (fromIndex: number, toIndex: number) => void;
   savedPhrases: Sentence[];
   onSelectSavedPhrase: (phrase: Sentence) => void;
   onDeleteSavedPhrase: (index: number) => void;
 }
+
+// A simple structure for category tab data, separating display logic from symbol data.
+const categoryTabs = [
+  ...predefinedCategories.map(c => ({ id: c.id, name: c.name, iconName: c.iconName })),
+  { id: 'custom', name: 'Personalizados', iconName: 'palette' },
+  { id: 'frases', name: 'Frases', iconName: 'messageSquare' },
+];
 
 const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
   onSymbolAdd,
@@ -26,19 +33,11 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
   onAddCustomSymbol,
   onEditCustomSymbol,
   onDeleteCustomSymbol,
+  onReorderCustomSymbol,
   savedPhrases,
   onSelectSavedPhrase,
   onDeleteSavedPhrase,
 }) => {
-  const allCategories = [
-    ...predefinedCategories,
-    // FIX: Cast customSymbols to unknown first to resolve type incompatibility.
-    // The symbols property here is for type compatibility with the Category type,
-    // but the actual symbols are rendered from the `customSymbols` prop directly.
-    { id: 'custom', name: 'Personalizados', iconName: 'palette', symbols: customSymbols as unknown as SymbolType[] },
-    { id: 'frases', name: 'Frases', iconName: 'messageSquare', symbols: [] },
-  ];
-
   const [activeCategoryId, setActiveCategoryId] = useState<string>(predefinedCategories[0].id);
   const [recentSymbols, setRecentSymbols] = useState<SymbolData[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,21 +55,22 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
     });
   };
 
-  const activeCategory = allCategories.find(c => c.id === activeCategoryId);
-
   const currentSymbols = useMemo(() => {
     if (activeCategoryId === 'custom') {
       return customSymbols;
     }
-    if (activeCategory) {
-      return activeCategory.symbols.map(s => ({
+
+    const category = predefinedCategories.find(c => c.id === activeCategoryId);
+    if (category) {
+      return category.symbols.map(s => ({
         ...s,
         emoji: s.icon,
         isCustom: false,
       }));
     }
+    
     return [];
-  }, [activeCategoryId, customSymbols, activeCategory]);
+  }, [activeCategoryId, customSymbols]);
 
   const filteredSymbols = useMemo(() => {
     if (!searchTerm.trim()) {
@@ -105,14 +105,14 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
             onEditSymbol={onEditCustomSymbol}
             onDeleteSymbol={onDeleteCustomSymbol}
             emptyMessage={emptyGridMessage}
+            isReorderable={true}
+            onReorder={onReorderCustomSymbol}
           />
         </>
       );
     }
-    if (activeCategory) {
-      return <SymbolGrid symbols={filteredSymbols} onSymbolClick={handleSymbolClick} emptyMessage={emptyGridMessage} />;
-    }
-    return null;
+    
+    return <SymbolGrid symbols={filteredSymbols} onSymbolClick={handleSymbolClick} emptyMessage={emptyGridMessage} />;
   };
 
   return (
@@ -120,7 +120,7 @@ const SymbolKeyboard: React.FC<SymbolKeyboardProps> = ({
       {/* Category Tabs */}
       <div className="border-b border-gray-700">
         <div className="flex gap-2 px-2 overflow-x-auto" aria-label="Tabs">
-          {allCategories.map((category) => (
+          {categoryTabs.map((category) => (
               (category.id !== 'frases' || savedPhrases.length > 0) &&
               <button
                 key={category.id}

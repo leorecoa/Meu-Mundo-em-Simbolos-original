@@ -20,6 +20,7 @@ interface PhraseBuilderProps {
   isSpeaking: boolean;
   onSavePhrase: () => void;
   canSave: boolean;
+  onOpenHistory: () => void;
 }
 
 const PhraseBuilder: React.FC<PhraseBuilderProps> = (props) => {
@@ -37,6 +38,7 @@ const PhraseBuilder: React.FC<PhraseBuilderProps> = (props) => {
     isSpeaking,
     onSavePhrase,
     canSave,
+    onOpenHistory,
   } = props;
 
   const sentenceText = sentence.map(s => s.name).join(' ');
@@ -44,8 +46,17 @@ const PhraseBuilder: React.FC<PhraseBuilderProps> = (props) => {
 
   return (
     <div className="bg-surface-dark/50 p-3 sm:p-4 rounded-2xl shadow-lg animate-fadeIn flex flex-col gap-3 h-full">
-      <div className="flex items-center justify-between">
-        <h2 className="text-md sm:text-lg font-semibold text-text-light dark:text-text-dark">Construtor de Frases</h2>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+            <h2 className="text-md sm:text-lg font-semibold text-text-light dark:text-text-dark">Construtor de Frases</h2>
+            <button
+                onClick={onOpenHistory}
+                aria-label="Histórico de Frases Recentes"
+                className="text-subtle hover:text-white transition-colors p-1 rounded-full hover:bg-white/10"
+            >
+                <Icon name="history" size={20} />
+            </button>
+        </div>
         <button
             onClick={onSavePhrase}
             disabled={!canSave}
