@@ -47,7 +47,7 @@ const SentenceStrip: React.FC<SentenceStripProps> = ({ sentence, onRemoveSymbol,
   };
 
   return (
-    <div className="w-full bg-background-light dark:bg-background-dark shadow-inner rounded-xl p-2 sm:p-4 min-h-[100px] lg:min-h-[140px] flex items-center" onDragOver={handleDragOver}>
+    <div className="w-full bg-background-light dark:bg-background-dark shadow-inner rounded-xl p-2 sm:p-4 min-h-[92px] sm:min-h-[124px] flex items-center" onDragOver={handleDragOver}>
       {sentence.length === 0 ? (
         <p className="w-full text-center text-subtle-light dark:text-subtle-dark">Toque nos símbolos para formar uma frase...</p>
       ) : (
@@ -73,8 +73,8 @@ const SentenceStrip: React.FC<SentenceStripProps> = ({ sentence, onRemoveSymbol,
                       ${isBeingDragged ? 'opacity-30 scale-95' : 'opacity-100'}
                       ${isDragTarget ? 'ring-2 ring-primary-light ring-offset-2 ring-offset-background-dark' : ''}
                     `}>
-                        <span className="text-4xl sm:text-5xl h-12 sm:h-14 flex items-center justify-center pointer-events-none">{symbol.imageUrl ? <img src={symbol.imageUrl} alt={symbol.name} className="w-12 h-12 object-cover rounded"/> : symbol.emoji}</span>
-                        <span className="text-xs font-medium text-text-light dark:text-text-dark w-16 sm:w-20 truncate pointer-events-none">{symbol.name}</span>
+                        <span className="text-3xl sm:text-4xl h-10 sm:h-12 flex items-center justify-center pointer-events-none">{symbol.imageUrl ? <img src={symbol.imageUrl} alt={symbol.name} className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded"/> : symbol.emoji}</span>
+                        <span className="text-xs font-medium text-text-light dark:text-text-dark w-14 sm:w-20 truncate pointer-events-none">{symbol.name}</span>
                     </div>
                     <button
                         onClick={() => onRemoveSymbol(index)}

@@ -41,12 +41,8 @@ const App: React.FC = () => {
     } else {
       root.classList.add('dark');
     }
-    // Font Size
-    root.classList.remove('text-sm', 'text-base', 'text-lg');
-    const fontSizeMap = { sm: 'text-sm', md: 'text-base', lg: 'text-lg' };
-    root.classList.add(fontSizeMap[appearanceSettings.fontSize]);
-
-  }, [appearanceSettings]);
+    // Font size is now handled by a class on the main div, allowing responsive overrides
+  }, [appearanceSettings.theme]);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 3500); // Increased splash screen time for animation
@@ -89,8 +85,10 @@ const App: React.FC = () => {
       }
   };
 
+  const fontSizeMap = { sm: 'text-sm', md: 'text-base', lg: 'text-lg' };
+
   return (
-      <div className="flex flex-col h-screen bg-white dark:bg-background-dark text-gray-800 dark:text-text-dark transition-colors duration-300">
+      <div className={`flex flex-col h-screen bg-white dark:bg-background-dark text-gray-800 dark:text-text-dark transition-colors duration-300 ${fontSizeMap[appearanceSettings.fontSize]}`}>
           <Header 
             activeScreen={currentScreen} 
             onScreenChange={setCurrentScreen} 

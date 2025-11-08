@@ -14,7 +14,7 @@ const SymbolGrid: React.FC<SymbolGridProps> = ({ symbols, onSymbolClick, onEditS
   return (
     <div className="p-2 sm:p-4">
       {symbols.length > 0 ? (
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-3">
           {symbols.map(symbol => (
             <SymbolCard 
               key={symbol.id} 

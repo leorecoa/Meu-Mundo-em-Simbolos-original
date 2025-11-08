@@ -63,12 +63,12 @@ const FreeTextScreen: React.FC<FreeTextScreenProps> = ({ voiceSettings }) => {
         });
     };
 
-    const commonTextAreaStyles = "w-full h-full p-4 text-lg bg-background-dark border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none resize-none";
+    const commonTextAreaStyles = "w-full h-full p-4 text-base sm:text-lg bg-background-dark border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none resize-none";
 
     return (
         <div className="flex flex-col h-full p-4 gap-4 font-sans">
             <div className="bg-surface-dark/50 p-4 sm:p-6 rounded-2xl shadow-lg animate-fadeIn flex flex-col gap-4 h-full">
-                <h2 className="text-xl font-semibold text-text-dark">Escrita Livre</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-text-dark">Escrita Livre</h2>
                 <p className="text-subtle">Digite sua mensagem abaixo e clique em "Falar" para ouvi-la.</p>
                 <div className="flex-grow w-full relative">
                     <textarea
@@ -95,15 +95,15 @@ const FreeTextScreen: React.FC<FreeTextScreenProps> = ({ voiceSettings }) => {
                         aria-label="Limpar Texto"
                         className="p-3 bg-surface-dark rounded-full shadow-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-110"
                     >
-                        <Icon name="trash" className="text-red-500" size={28} />
+                        <Icon name="trash" className="text-red-500 w-7 h-7" />
                     </button>
                     <button
                         onClick={handleSpeak}
                         disabled={text.trim().length === 0}
                         aria-label={isSpeaking ? "Parar" : "Falar"}
-                        className="bg-gradient-to-br from-primary to-brand text-white w-16 h-16 p-3 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-110"
+                        className="bg-gradient-to-br from-primary to-brand text-white w-14 h-14 sm:w-16 sm:h-16 p-3 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-110"
                     >
-                        <Icon name={isSpeaking ? "stopSpeak" : "speak"} size={32} />
+                        <Icon name={isSpeaking ? "stopSpeak" : "speak"} className="w-7 h-7 sm:w-8 sm:h-8" />
                     </button>
                 </div>
             </div>

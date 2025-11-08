@@ -36,9 +36,9 @@ const NavButton: React.FC<{
 
 const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange, onOpenSettings }) => {
     return (
-        <header className="w-full p-2 sm:p-3 bg-surface-dark/50 backdrop-blur-lg shadow-lg flex justify-between items-center flex-shrink-0 z-10 border-b border-white/10 gap-2">
-            <div className="flex items-center gap-4">
-              <h1 className="text-lg sm:text-xl font-bold text-text-light truncate">Meu Mundo em Símbolos</h1>
+        <header className="w-full p-2 bg-surface-dark/50 backdrop-blur-lg shadow-lg flex justify-between items-center flex-shrink-0 z-10 border-b border-white/10 gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <h1 className="text-base sm:text-lg font-bold text-text-light truncate">Meu Mundo em Símbolos</h1>
               <button onClick={onOpenSettings} aria-label="Abrir Configurações" className="text-subtle hover:text-white transition-colors">
                   <Icon name="settings" size={24} />
               </button>
