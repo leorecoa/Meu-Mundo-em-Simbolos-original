@@ -4,109 +4,110 @@ import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import FreeTextScreen from './screens/FreeTextScreen';
 import Header from './components/Header';
 import TherapistScreen from './screens/TherapistScreen';
-import SettingsModal from './components/modals/SettingsModal';
-import { useLocalStorage } from './hooks';
-import { VoiceSettings, AppearanceSettings } from './types';
+import { Sentence, SymbolData } from './types';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
 const getScreenFromHash = (): ScreenView => {
-    const hash = window.location.hash.substring(1); // Remove '#', leaves '/text', '/therapist', '/' or ''
-    switch (hash) {
-        case '/text':
-            return 'text';
-        case '/therapist':
-            return 'therapist';
-        case '/symbols':
-        case '/':
-        case '':
-        default:
-            return 'symbols';
-    }
+  const hash = globalThis.location?.hash?.substring(1) ?? ''; // Remove '#'
+  switch (hash) {
+    case '/text':
+      return 'text';
+    case '/therapist':
+      return 'therapist';
+    case '/symbols':
+    case '/':
+    case '':
+    default:
+      return 'symbols';
+  }
 };
 
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentScreen, setCurrentScreen] = useState<ScreenView>(getScreenFromHash());
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', { rate: 0.9, pitch: 1.0 });
-  const [appearanceSettings, setAppearanceSettings] = useLocalStorage<AppearanceSettings>('appearanceSettings', { theme: 'dark', fontSize: 'md' });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    // Theme
-    if (appearanceSettings.theme === 'light') {
-      root.classList.remove('dark');
-    } else {
-      root.classList.add('dark');
-    }
-    // Font size is now handled by a class on the main div, allowing responsive overrides
-  }, [appearanceSettings.theme]);
+  const [savedPhrases, setSavedPhrases] = useState<Sentence[]>([]);
+  const [customSymbols, setCustomSymbols] = useState<SymbolData[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 3500); // Increased splash screen time for animation
     return () => clearTimeout(timer);
   }, []);
 
+  // Load data from localStorage on initial render
+  useEffect(() => {
+    try {
+      const storedPhrases = localStorage.getItem('savedPhrases');
+      if (storedPhrases) {
+        setSavedPhrases(JSON.parse(storedPhrases));
+      }
+      const storedSymbols = localStorage.getItem('customSymbols');
+      if (storedSymbols) {
+        setCustomSymbols(JSON.parse(storedSymbols));
+      }
+    } catch (error) {
+      console.error("Failed to load data from localStorage", error);
+    }
+  }, []);
+
+  // Save data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('savedPhrases', JSON.stringify(savedPhrases));
+    localStorage.setItem('customSymbols', JSON.stringify(customSymbols));
+  }, [savedPhrases, customSymbols]);
+
   // Update URL hash when screen changes
   useEffect(() => {
-      const path = currentScreen === 'symbols' ? '/' : `/${currentScreen}`;
-      const newHash = `#${path}`;
-      if (window.location.hash !== newHash) {
-          // Use replaceState to avoid polluting browser history on internal nav
-          history.replaceState(null, '', newHash);
-      }
+    const path = currentScreen === 'symbols' ? '/' : `/${currentScreen}`;
+    if (window.location.hash !== `#${path}`) {
+      window.location.hash = path;
+    }
   }, [currentScreen]);
 
   // Listen for hash changes (back/forward buttons)
   useEffect(() => {
-      const handleHashChange = () => {
-          setCurrentScreen(getScreenFromHash());
-      };
-      window.addEventListener('hashchange', handleHashChange);
-      return () => window.removeEventListener('hashchange', handleHashChange);
+    const handleHashChange = () => {
+      setCurrentScreen(getScreenFromHash());
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
 
   if (loading) {
     return <SplashScreen />;
   }
-  
+
   const renderScreen = () => {
-      switch (currentScreen) {
+    switch (currentScreen) {
       case 'symbols':
-          return <SentenceEditorScreen voiceSettings={voiceSettings} />;
+        return (
+          <SentenceEditorScreen
+            savedPhrases={savedPhrases}
+            setSavedPhrases={setSavedPhrases}
+            customSymbols={customSymbols}
+            setCustomSymbols={setCustomSymbols}
+          />
+        );
       case 'text':
-          return <FreeTextScreen voiceSettings={voiceSettings} />;
+        return <FreeTextScreen />;
       case 'therapist':
-          return <TherapistScreen />;
+        return <TherapistScreen savedPhrases={savedPhrases} customSymbols={customSymbols} />;
       default:
-          return <SentenceEditorScreen voiceSettings={voiceSettings} />;
-      }
+        // Fallback to symbols screen with props
+        return <SentenceEditorScreen savedPhrases={savedPhrases} setSavedPhrases={setSavedPhrases} customSymbols={customSymbols} setCustomSymbols={setCustomSymbols} />;
+    }
   };
 
-  const fontSizeMap = { sm: 'text-sm', md: 'text-base', lg: 'text-lg' };
-
   return (
-      <div className={`flex flex-col h-screen bg-white dark:bg-background-dark text-gray-800 dark:text-text-dark transition-colors duration-300 ${fontSizeMap[appearanceSettings.fontSize]}`}>
-          <Header 
-            activeScreen={currentScreen} 
-            onScreenChange={setCurrentScreen} 
-            onOpenSettings={() => setIsSettingsOpen(true)}
-          />
-          <main className="flex-grow min-h-0">
-              {renderScreen()}
-          </main>
-          <SettingsModal
-            isOpen={isSettingsOpen}
-            onClose={() => setIsSettingsOpen(false)}
-            voiceSettings={voiceSettings}
-            onVoiceSettingsChange={setVoiceSettings}
-            appearanceSettings={appearanceSettings}
-            onAppearanceSettingsChange={setAppearanceSettings}
-          />
-      </div>
+    <div className="flex flex-col h-screen bg-background-dark text-text-dark">
+      <Header activeScreen={currentScreen} onScreenChange={setCurrentScreen} />
+      <main className="flex-grow min-h-0">
+        {renderScreen()}
+      </main>
+    </div>
   );
-}
+};
 
 export default App;
