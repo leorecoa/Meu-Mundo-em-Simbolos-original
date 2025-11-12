@@ -29,9 +29,6 @@ function App() {
       />
       <div className="flex-grow p-4 text-center">
         {/* Renderiza o conteúdo com base na tela ativa */}
-        {activeScreen === 'symbols' && <div>Tela de Símbolos</div>}
-        {activeScreen === 'text' && <div>Tela de Texto</div>}
-        {activeScreen === 'therapist' && <div>Tela do Acompanhante</div>}
         {activeScreen === 'symbols' && <SentenceEditorScreen voiceSettings={voiceSettings} />}
         {activeScreen === 'text' && <TextToSpeechScreen />}
         {activeScreen === 'therapist' && <TherapistScreen />}
