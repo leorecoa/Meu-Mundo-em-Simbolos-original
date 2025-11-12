@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Icon from '../common/Icon';
+import Icon from '../common/Icon'; // Mantido
 import { BackupData, VoiceSettings, AppearanceSettings, FontSize } from '../../types';
 
 interface SettingsModalProps {
