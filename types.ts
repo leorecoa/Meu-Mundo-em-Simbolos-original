@@ -53,6 +53,8 @@ export interface Goal {
 export interface VoiceSettings {
   rate: number;
   pitch: number;
+  volume?: number;
+  voice?: any;
 }
 
 export interface AppearanceSettings {
