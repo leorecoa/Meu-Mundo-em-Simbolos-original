@@ -141,5 +141,18 @@ export const categories: Category[] = [
         { id: 'month', name: 'Mês', icon: '🈷️', category: 'time', speechText: 'mês' },
         { id: 'year', name: 'Ano', icon: '🎇', category: 'time', speechText: 'ano' },
     ]
+  },
+  {
+    id: 'food',
+    name: 'Comidas',
+    iconName: 'utensils', // Ícone de talheres da biblioteca Lucide
+    symbols: [
+        { id: 'apple', name: 'Maçã', icon: '🍎', category: 'food', speechText: 'maçã' },
+        { id: 'banana', name: 'Banana', icon: '🍌', category: 'food', speechText: 'banana' },
+        { id: 'bread', name: 'Pão', icon: '🍞', category: 'food', speechText: 'pão' },
+        { id: 'pizza', name: 'Pizza', icon: '🍕', category: 'food', speechText: 'pizza' },
+        { id: 'milk', name: 'Leite', icon: '🥛', category: 'food', speechText: 'leite' },
+        { id: 'juice', name: 'Suco', icon: '🧃', category: 'food', speechText: 'suco' }
+    ]
   }
 ];
