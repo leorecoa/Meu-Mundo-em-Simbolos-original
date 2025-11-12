@@ -1,12 +1,7 @@
-import React from 'react';
-import { VoiceSettings } from '../hooks/useVoiceSettings';
-import Icon from './common/Icon';
+import React, { useRef } from 'react';
+import { useVoiceSettings, VoiceSettings } from '@/hooks/useVoiceSettings';
+import Icon from '@/components/common/Icon';
 
-// Mock da interface AppearanceSettings, já que o hook não foi fornecido
-interface AppearanceSettings {
-    theme: 'dark' | 'light';
-    fontSize: number;
-}
 interface SettingsModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -24,66 +19,49 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     appearanceSettings,
     onAppearanceSettingsChange,
 }) => {
+    const { settings, voices, updateSettings, speak } = useVoiceSettings();
+
     if (!isOpen) {
         return null;
     }
 
-    // Mock de dados para exibição, já que os hooks não estão aqui
-    const voices = typeof window !== 'undefined' ? window.speechSynthesis.getVoices() : [];
-    const speak = (text: string) => window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-
     const handleVoiceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedVoice = voices.find(v => v.name === event.target.value) || null;
-        onVoiceSettingsChange({ ...voiceSettings, voice: selectedVoice });
+        updateSettings({ voice: selectedVoice });
     };
 
     const handleSettingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        onVoiceSettingsChange({ ...voiceSettings, [name]: parseFloat(value) });
+        updateSettings({ [name]: parseFloat(value) });
     };
 
     const handleTestVoice = () => {
         speak("Olá, este é um teste de voz.");
     };
 
-    return (
-        <div style={styles.overlay}>
-            <div style={styles.modal}>
-                <h2>Configurações de Voz</h2>
-
-                <div style={styles.formGroup}>
-                    <label htmlFor="voice-select">Voz:</label>
-                    <select
-                        id="voice-select"
-                        value={voiceSettings.voice?.name || ''}
-                        onChange={handleVoiceChange}
-                        style={styles.select}
-                    >
-                        {voices.map(voice => (
-                            <option key={voice.name} value={voice.name}>
-                                {`${voice.name} (${voice.lang})`}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div style={styles.formGroup}>
-                    <label htmlFor="rate">Velocidade: {voiceSettings.rate.toFixed(1)}</label>
-                    <input type="range" id="rate" name="rate" min="0.5" max="2" step="0.1" value={voiceSettings.rate} onChange={handleSettingChange} />
-                </div>
-
-                <div style={styles.formGroup}>
-                    <label htmlFor="pitch">Tom: {voiceSettings.pitch.toFixed(1)}</label>
-                    <input type="range" id="pitch" name="pitch" min="0" max="2" step="0.1" value={voiceSettings.pitch} onChange={handleSettingChange} />
-                </div>
-
-                <div style={styles.buttonGroup}>
-                    <button onClick={handleTestVoice} style={styles.button}>Testar Voz</button>
-                    <button onClick={onClose} style={{ ...styles.button, ...styles.closeButton }}>Fechar</button>
-                </div>
+    return <div style={styles.overlay}>
+        <div style={styles.modal}>
+            <h2>Configurações de Voz</h2>
+            <div style={styles.formGroup}>
+                <label htmlFor="voice-select">Voz:</label>
+                <select id="voice-select" value={settings.voice?.name || ''} onChange={handleVoiceChange} style={styles.select}>
+                    {voices.map(voice => <option key={voice.name} value={voice.name}>{`${voice.name} (${voice.lang})`}</option>)}
+                </select>
+            </div>
+            <div style={styles.formGroup}>
+                <label htmlFor="rate">Velocidade: {settings.rate.toFixed(1)}</label>
+                <input type="range" id="rate" name="rate" min="0.5" max="2" step="0.1" value={settings.rate} onChange={handleSettingChange} />
+            </div>
+            <div style={styles.formGroup}>
+                <label htmlFor="pitch">Tom: {settings.pitch.toFixed(1)}</label>
+                <input type="range" id="pitch" name="pitch" min="0" max="2" step="0.1" value={settings.pitch} onChange={handleSettingChange} />
+            </div>
+            <div style={styles.buttonGroup}>
+                <button onClick={handleTestVoice} style={styles.button}>Testar Voz</button>
+                <button onClick={onClose} style={{ ...styles.button, ...styles.closeButton }}>Fechar</button>
             </div>
         </div>
-    );
+    </div>;
 };
 
 // Estilos básicos para o modal
