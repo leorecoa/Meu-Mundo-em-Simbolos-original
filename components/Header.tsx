@@ -22,11 +22,10 @@ const NavButton: React.FC<{
                 e.preventDefault();
                 onClick();
             }}
-            className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                isActive
+            className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${isActive
                     ? 'bg-gradient-to-r from-primary to-brand text-white shadow-lg'
                     : 'text-subtle hover:bg-gray-700/50'
-            }`}
+                }`}
         >
             <Icon name={iconName} className="w-5 h-5" />
             <span className="hidden sm:inline">{label}</span>
@@ -38,10 +37,10 @@ const Header: React.FC<HeaderProps> = ({ activeScreen, onScreenChange, onOpenSet
     return (
         <header className="w-full px-3 py-2 sm:px-4 bg-surface-dark/50 backdrop-blur-lg shadow-lg flex justify-between items-center flex-shrink-0 z-10 border-b border-white/10 gap-3">
             <div className="flex items-center gap-3">
-              <h1 className="text-md sm:text-lg font-bold text-text-light truncate">Meu Mundo em Símbolos</h1>
-              <button onClick={onOpenSettings} aria-label="Abrir Configurações" className="text-subtle hover:text-white transition-colors">
-                  <Icon name="settings" className="w-6 h-6" />
-              </button>
+                <h1 className="text-md sm:text-lg font-bold text-text-light truncate">Meu Mundo em Símbolos</h1>
+                <button onClick={onOpenSettings} aria-label="Abrir Configurações" className="text-subtle hover:text-white transition-colors">
+                    <Icon name="settings" className="w-6 h-6" />
+                </button>
             </div>
             <nav className="flex items-center gap-1 p-1 bg-background-dark/60 rounded-xl flex-shrink-0">
                 <NavButton

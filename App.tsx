@@ -4,7 +4,7 @@ import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import FreeTextScreen from './screens/FreeTextScreen';
 import Header from './components/Header';
 import TherapistScreen from './screens/TherapistScreen';
-import { Sentence, SymbolData } from './types';
+import { Sentence, SymbolData, VoiceSettings } from './types';
 import FeedbackButton from './components/FeedbackButton';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
@@ -30,6 +30,8 @@ const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenView>(getScreenFromHash());
   const [savedPhrases, setSavedPhrases] = useState<Sentence[]>([]);
   const [customSymbols, setCustomSymbols] = useState<SymbolData[]>([]);
+  const [voiceSettings, setVoiceSettings] = useState<VoiceSettings>({ rate: 1, pitch: 1 });
+  const [showSettings, setShowSettings] = useState(false);
 
   // Load data from localStorage on initial render
   useEffect(() => {
@@ -80,25 +82,21 @@ const App: React.FC = () => {
       case 'symbols':
         return (
           <SentenceEditorScreen
-            savedPhrases={savedPhrases}
-            setSavedPhrases={setSavedPhrases}
-            customSymbols={customSymbols}
-            setCustomSymbols={setCustomSymbols}
+            voiceSettings={voiceSettings}
           />
         );
       case 'text':
-        return <FreeTextScreen />;
+        return <FreeTextScreen voiceSettings={voiceSettings} />;
       case 'therapist':
-        return <TherapistScreen savedPhrases={savedPhrases} customSymbols={customSymbols} />;
+        return <TherapistScreen />;
       default:
-        // Fallback to symbols screen with props
-        return <SentenceEditorScreen savedPhrases={savedPhrases} setSavedPhrases={setSavedPhrases} customSymbols={customSymbols} setCustomSymbols={setCustomSymbols} />;
+        return <SentenceEditorScreen voiceSettings={voiceSettings} />;
     }
   };
 
   return (
     <div className="flex flex-col h-screen bg-background-dark text-text-light">
-      <Header activeScreen={currentScreen} onScreenChange={setCurrentScreen} />
+      <Header activeScreen={currentScreen} onScreenChange={setCurrentScreen} onOpenSettings={() => setShowSettings(true)} />
       <main className="flex-grow min-h-0">
         {renderScreen()}
       </main>
