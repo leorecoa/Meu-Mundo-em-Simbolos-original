@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import SettingsModal from './components/modals/SettingsModal';
 import Header from './components/Header';
-import SentenceEditorScreen from './screens/SentenceEditorScreen'; // Importa a tela principal
-import TextToSpeechScreen from './screens/TextToSpeechScreen'; // Placeholder para a tela de Texto
-import TherapistScreen from './screens/TherapistScreen'; // Placeholder para a tela de Acompanhante
-import { useLocalStorage, useAppearance } from './hooks';
+import SentenceEditorScreen from './screens/SentenceEditorScreen';
+import TextToSpeechScreen from './screens/TextToSpeechScreen';
+import TherapistScreen from './screens/TherapistScreen';
+import { useLocalStorage } from './hooks'; // REMOVE useAppearance daqui
 import { VoiceSettings, AppearanceSettings } from './types';
 
-// Define e exporta o tipo para as telas.
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
-  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', { rate: 0.9, pitch: 1.0, volume: 1, voice: null });
-  const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
+  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', { 
+    rate: 0.9, 
+    pitch: 1.0, 
+    volume: 1, 
+    voice: null 
+  });
+  
+  // CORREÇÃO: Use useLocalStorage para appearance também
+  const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', { 
+    theme: 'dark', 
+    fontSize: 'md' 
+  });
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -27,7 +36,6 @@ function App() {
         onOpenSettings={openModal}
       />
       <div className="flex-grow p-4 text-center">
-        {/* Renderiza o conteúdo com base na tela ativa */}
         {activeScreen === 'symbols' && <SentenceEditorScreen voiceSettings={voiceSettings} />}
         {activeScreen === 'text' && <TextToSpeechScreen />}
         {activeScreen === 'therapist' && <TherapistScreen />}
