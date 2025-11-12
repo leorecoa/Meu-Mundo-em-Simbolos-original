@@ -1,95 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meu Mundo em Símbolos</title>
-    <meta name="theme-color" content="#111827" />
-    <link rel="manifest" href="manifest.json" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                light: '#8E2DE2',
-                DEFAULT: '#6a11cb',
-                dark: '#4A00E0',
-              },
-              secondary: {
-                light: '#2575fc',
-                DEFAULT: '#2575fc',
-                dark: '#2575fc',
-              },
-              brand: {
-                light: '#8E2DE2',
-                DEFAULT: '#6a11cb',
-                dark: '#4A00E0',
-              },
-              background: {
-                light: '#ffffff',
-                DEFAULT: '#ffffff',
-                dark: '#f9fafb',
-              },
-              surface: {
-                light: '#f3f4f6',
-                DEFAULT: '#f3f4f6',
-                dark: '#e5e7eb',
-              },
-              text: {
-                light: '#1f2937',
-                DEFAULT: '#1f2937',
-                dark: '#111827',
-              },
-              subtle: {
-                light: '#6b7280',
-                DEFAULT: '#6b7280',
-                dark: '#4b5563',
-              }
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              fadeOut: {
-                '0%': { opacity: '1' },
-                '100%': { opacity: '0' },
-              },
-              slideInUp: {
-                '0%': { transform: 'translateY(20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
-              },
-              assemble: {
-                '0%': { transform: 'translateY(30px) scale(0.8)', opacity: '0' },
-                '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
-              },
-              pulseGlow: {
-                '0%, 100%': { filter: 'drop-shadow(0 0 4px rgba(236, 72, 153, 0.4))' },
-                '50%': { filter: 'drop-shadow(0 0 12px rgba(236, 72, 153, 0.7))' }
-              },
-              gradientFlow: {
-                '0%, 100%': { backgroundPosition: '0% 50%' },
-                '50%': { backgroundPosition: '100% 50%' },
-              },
-              subtlePulse: {
-                '0%, 100%': { transform: 'scale(1)' },
-                '50%': { transform: 'scale(1.02)' },
-              },
-            },
-            animation: {
-              fadeIn: 'fadeIn 0.5s ease-in-out forwards',
-              fadeOut: 'fadeOut 0.5s ease-in-out forwards',
-              slideInUp: 'slideInUp 0.5s ease-out',
-              assemble: 'assemble 0.6s ease-out forwards',
-              'pulse-glow': 'pulseGlow 2.5s ease-in-out infinite',
-              'gradient-flow': 'gradientFlow 6s ease-in-out infinite',
-            }
-          }
-        }
-      }
-    </script>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Mundo em Símbolos</title>
+  <meta name="theme-color" content="#111827" />
+  <link rel="manifest" href="manifest.json" />
   <script type="importmap">
 {
   "imports": {
@@ -101,19 +18,21 @@
 }
 </script>
 </head>
-  <body class="bg-gray-100 text-text-light">
-    <div id="root"></div>
-    <script type="module" src="index.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('SW registered: ', registration);
-          }).catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
-          });
+
+<body class="bg-gray-100 text-text-light">
+  <div id="root"></div>
+  <script type="module" src="index.tsx"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('SW registered: ', registration);
+        }).catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
         });
-      }
-    </script>
-  </body>
+      });
+    }
+  </script>
+</body>
+
 </html>

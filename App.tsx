@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { SettingsModal } from './components/SettingsModal.tsx'; // Caminho corrigido
-import Header from './components/Header'; // Caminho corrigido
+import Header from './components/Header';
+import SettingsModal from './components/SettingsModal';
+import { useVoiceSettings, VoiceSettings } from './hooks/useVoiceSettings';
+
+// Mock da interface AppearanceSettings, já que o hook não foi fornecido
+interface AppearanceSettings {
+  theme: 'dark' | 'light';
+  fontSize: number;
+}
 
 // Define e exporta o tipo para as telas, resolvendo o erro de importação no Header.
 export type ScreenView = 'symbols' | 'text' | 'therapist';
@@ -8,6 +15,18 @@ export type ScreenView = 'symbols' | 'text' | 'therapist';
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
+  const {
+    settings: voiceSettings,
+    updateSettings: onVoiceSettingsChange,
+    voices,
+    speak,
+  } = useVoiceSettings();
+
+  // Mock do estado de aparência
+  const [appearanceSettings, setAppearanceSettings] = useState<AppearanceSettings>({
+    theme: 'dark',
+    fontSize: 16,
+  });
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -26,7 +45,14 @@ function App() {
         {activeScreen === 'therapist' && <div>Tela do Acompanhante</div>}
       </div>
 
-      <SettingsModal isOpen={isModalOpen} onClose={closeModal} />
+      <SettingsModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        voiceSettings={voiceSettings}
+        onVoiceSettingsChange={onVoiceSettingsChange}
+        appearanceSettings={appearanceSettings}
+        onAppearanceSettingsChange={setAppearanceSettings}
+      />
     </div>
   );
 }
