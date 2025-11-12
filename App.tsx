@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { SettingsModal } from './SettingsModal.tsx';
-import Header from '@/components/Header';
+import { SettingsModal } from './components/SettingsModal.tsx'; // Caminho corrigido
+import Header from './components/Header'; // Caminho corrigido
 
 // Define e exporta o tipo para as telas, resolvendo o erro de importação no Header.
 export type ScreenView = 'symbols' | 'text' | 'therapist';
