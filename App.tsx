@@ -1,29 +1,18 @@
 import React, { useState } from 'react';
 import SettingsModal from './components/modals/SettingsModal';
 import Header from './components/Header';
-import { useLocalStorage } from './hooks';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { useAppearance } from './hooks/useAppearance';
 import { VoiceSettings, AppearanceSettings } from './types';
 
-// Define e exporta o tipo para as telas, resolvendo o erro de importação no Header.
+// Define e exporta o tipo para as telas.
 export type ScreenView = 'symbols' | 'text' | 'therapist';
-
-// Função para aplicar o tema e o tamanho da fonte no body
-function useAppearance(initialSettings: AppearanceSettings): [AppearanceSettings, React.Dispatch<React.SetStateAction<AppearanceSettings>>] {
-  const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', initialSettings);
-
-  React.useEffect(() => {
-    const body = document.body;
-    body.className = `theme-${appearance.theme} font-size-${appearance.fontSize}`;
-  }, [appearance]);
-
-  return [appearance, setAppearance];
-}
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
-  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', { rate: 0.9, pitch: 1.0 });
-  const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
+  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', { rate: 0.9, pitch: 1.0, volume: 1, voice: null });
+  const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' }); // Agora importa o hook
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -35,7 +24,7 @@ function App() {
         onScreenChange={setActiveScreen}
         onOpenSettings={openModal}
       />
-      <div className="flex-grow p-4 text-center">
+      <main className="flex-grow p-4 text-center">
         {/* Renderiza o conteúdo com base na tela ativa */}
         {activeScreen === 'symbols' && <div>Tela de Símbolos</div>}
         {activeScreen === 'text' && <div>Tela de Texto</div>}
@@ -49,7 +38,7 @@ function App() {
         appearanceSettings={appearance}
         onAppearanceSettingsChange={setAppearance}
       />
-    </div>
+    </main >
   );
 }
 
