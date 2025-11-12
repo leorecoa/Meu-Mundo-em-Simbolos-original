@@ -10,20 +10,6 @@ import { VoiceSettings, AppearanceSettings } from './types';
 // Define e exporta o tipo para as telas.
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
-// Hook personalizado para aparência - CORRIGIDO
-function useAppearance(initialSettings: AppearanceSettings): [AppearanceSettings, React.Dispatch<React.SetStateAction<AppearanceSettings>>] {
-  const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', initialSettings);
-
-  React.useEffect(() => {
-    const body = document.body;
-    // Limpa classes antigas para evitar conflitos
-    body.className = '';
-    body.classList.add(`theme-${appearance.theme}`, `font-size-${appearance.fontSize}`);
-  }, [appearance]);
-
-  return [appearance, setAppearance];
-}
-
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
@@ -34,11 +20,17 @@ function App() {
     voice: null
   });
 
-  // CORREÇÃO: Usando o hook useAppearance corretamente
-  const [appearance, setAppearance] = useAppearance({
+  const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', {
     theme: 'dark',
     fontSize: 'md'
   });
+
+  React.useEffect(() => {
+    const body = document.body;
+    body.className = ''; // Limpa classes antigas
+    body.classList.add(`theme-${appearance.theme}`, `font-size-${appearance.fontSize}`);
+    document.documentElement.className = appearance.theme;
+  }, [appearance]);
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
