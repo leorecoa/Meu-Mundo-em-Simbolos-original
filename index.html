@@ -9,44 +9,43 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        darkMode: 'class',
         theme: {
           extend: {
             colors: {
               primary: {
-                light: '#6D28D9',
-                DEFAULT: '#5B21B6',
-                dark: '#4C1D95',
+                light: '#8E2DE2',
+                DEFAULT: '#6a11cb',
+                dark: '#4A00E0',
               },
               secondary: {
-                light: '#10B981',
-                DEFAULT: '#059669',
-                dark: '#047857',
+                light: '#2575fc',
+                DEFAULT: '#2575fc',
+                dark: '#2575fc',
               },
               brand: {
-                light: '#EC4899',
-                DEFAULT: '#D946EF',
-                dark: '#C026D3',
+                light: '#8E2DE2',
+                DEFAULT: '#6a11cb',
+                dark: '#4A00E0',
               },
               background: {
-                light: '#F9FAFB',
-                DEFAULT: '#111827',
-                dark: '#030712',
+                light: '#ffffff',
+                DEFAULT: '#ffffff',
+                dark: '#f9fafb',
               },
               surface: {
-                light: '#FFFFFF',
+                light: '#f3f4f6',
+                DEFAULT: '#f3f4f6',
+                dark: '#e5e7eb',
+              },
+              text: {
+                light: '#1f2937',
                 DEFAULT: '#1f2937',
                 dark: '#111827',
               },
-              text: {
-                light: '#1F2937',
-                DEFAULT: '#F9FAFB',
-                dark: '#E5E7EB',
-              },
               subtle: {
-                light: '#6B7280',
-                DEFAULT: '#9CA3AF',
-                dark: '#6B7280',
+                light: '#6b7280',
+                DEFAULT: '#6b7280',
+                dark: '#4b5563',
               }
             },
             keyframes: {
@@ -102,7 +101,7 @@
 }
 </script>
 </head>
-  <body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+  <body class="bg-gray-100 text-text-light">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
     <script>

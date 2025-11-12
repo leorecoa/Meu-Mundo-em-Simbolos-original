@@ -97,7 +97,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background-dark text-text-dark">
+    <div className="flex flex-col h-screen bg-background-dark text-text-light">
       <Header activeScreen={currentScreen} onScreenChange={setCurrentScreen} />
       <main className="flex-grow min-h-0">
         {renderScreen()}
