@@ -1,5 +1,5 @@
 import React from 'react';
-import { useVoiceSettings, VoiceSettings } from '@/hooks/useVoiceSettings';
+import { useVoiceSettings, VoiceSettings } from './useVoiceSettings.ts';
 
 interface SettingsModalProps {
     isOpen: boolean;
