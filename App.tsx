@@ -30,11 +30,6 @@ const App: React.FC = () => {
   const [savedPhrases, setSavedPhrases] = useState<Sentence[]>([]);
   const [customSymbols, setCustomSymbols] = useState<SymbolData[]>([]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 3500); // Increased splash screen time for animation
-    return () => clearTimeout(timer);
-  }, []);
-
   // Load data from localStorage on initial render
   useEffect(() => {
     try {
@@ -76,7 +71,7 @@ const App: React.FC = () => {
 
 
   if (loading) {
-    return <SplashScreen />;
+    return <SplashScreen onStart={() => setLoading(false)} />;
   }
 
   const renderScreen = () => {
