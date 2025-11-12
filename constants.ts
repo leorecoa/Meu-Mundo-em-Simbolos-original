@@ -154,5 +154,18 @@ export const categories: Category[] = [
         { id: 'milk', name: 'Leite', icon: '🥛', category: 'food', speechText: 'leite' },
         { id: 'juice', name: 'Suco', icon: '🧃', category: 'food', speechText: 'suco' }
     ]
+  },
+  {
+    id: 'animals',
+    name: 'Animais',
+    iconName: 'paw-print', // Ícone de patinha da biblioteca Lucide
+    symbols: [
+        { id: 'dog', name: 'Cachorro', icon: '🐶', category: 'animals', speechText: 'cachorro' },
+        { id: 'cat', name: 'Gato', icon: '🐱', category: 'animals', speechText: 'gato' },
+        { id: 'bird', name: 'Pássaro', icon: '🐦', category: 'animals', speechText: 'pássaro' },
+        { id: 'fish', name: 'Peixe', icon: '🐠', category: 'animals', speechText: 'peixe' },
+        { id: 'lion', name: 'Leão', icon: '🦁', category: 'animals', speechText: 'leão' },
+        { id: 'cow', name: 'Vaca', icon: '🐮', category: 'animals', speechText: 'vaca' }
+    ]
   }
 ];
