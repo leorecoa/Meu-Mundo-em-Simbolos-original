@@ -5,7 +5,7 @@ import SentenceEditorScreen from './screens/SentenceEditorScreen'; // Importa a 
 import TextToSpeechScreen from './screens/TextToSpeechScreen'; // Placeholder para a tela de Texto
 import TherapistScreen from './screens/TherapistScreen'; // Placeholder para a tela de Acompanhante
 import { useLocalStorage } from './hooks';
-import { useAppearance } from './hooks/useAppearance'; // Importa o novo hook
+import { useAppearance } from './hooks/useAppearance';
 import { VoiceSettings, AppearanceSettings } from './types';
 
 // Define e exporta o tipo para as telas.
@@ -32,6 +32,9 @@ function App() {
         {activeScreen === 'symbols' && <div>Tela de Símbolos</div>}
         {activeScreen === 'text' && <div>Tela de Texto</div>}
         {activeScreen === 'therapist' && <div>Tela do Acompanhante</div>}
+        {activeScreen === 'symbols' && <SentenceEditorScreen voiceSettings={voiceSettings} />}
+        {activeScreen === 'text' && <TextToSpeechScreen />}
+        {activeScreen === 'therapist' && <TherapistScreen />}
       </div>
       <SettingsModal
         isOpen={isModalOpen}

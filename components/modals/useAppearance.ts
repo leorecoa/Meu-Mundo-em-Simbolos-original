@@ -1,6 +1,6 @@
 import React from 'react';
-import { useLocalStorage } from '.';
-import { AppearanceSettings } from '../types';
+import { useLocalStorage } from './'; // Importa do index.ts da mesma pasta (hooks)
+import { AppearanceSettings } from '../types'; // Importa da pasta pai
 
 export function useAppearance(initialSettings: AppearanceSettings): [AppearanceSettings, React.Dispatch<React.SetStateAction<AppearanceSettings>>] {
     const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', initialSettings);
