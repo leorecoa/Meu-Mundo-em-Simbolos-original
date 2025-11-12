@@ -4,8 +4,7 @@ import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen'; // Importa a tela principal
 import TextToSpeechScreen from './screens/TextToSpeechScreen'; // Placeholder para a tela de Texto
 import TherapistScreen from './screens/TherapistScreen'; // Placeholder para a tela de Acompanhante
-import { useLocalStorage } from './hooks';
-import { useAppearance } from './hooks/useAppearance';
+import { useLocalStorage, useAppearance } from './hooks';
 import { VoiceSettings, AppearanceSettings } from './types';
 
 // Define e exporta o tipo para as telas.

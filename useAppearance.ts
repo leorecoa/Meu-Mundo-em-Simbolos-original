@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocalStorage } from '.';
+import { useLocalStorage } from './useLocalStorage';
 import { AppearanceSettings } from '../types';
 
 export function useAppearance(initialSettings: AppearanceSettings): [AppearanceSettings, React.Dispatch<React.SetStateAction<AppearanceSettings>>] {

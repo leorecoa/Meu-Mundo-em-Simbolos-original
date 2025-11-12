@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PinLockScreen from '../components/therapist/PinLockScreen';
-import { useLocalStorage } from '../hooks';
+import { useLocalStorage } from '../hooks'; // Este caminho agora funciona corretamente
 
 const TherapistScreen: React.FC = () => {
     const [isUnlocked, setIsUnlocked] = useState(false);
