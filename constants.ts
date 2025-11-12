@@ -167,5 +167,18 @@ export const categories: Category[] = [
         { id: 'lion', name: 'Leão', icon: '🦁', category: 'animals', speechText: 'leão' },
         { id: 'cow', name: 'Vaca', icon: '🐮', category: 'animals', speechText: 'vaca' }
     ]
+  },
+  {
+    id: 'nature',
+    name: 'Natureza',
+    iconName: 'leaf', // Ícone de folha da biblioteca Lucide
+    symbols: [
+        { id: 'sun', name: 'Sol', icon: '☀️', category: 'nature', speechText: 'sol' },
+        { id: 'moon', name: 'Lua', icon: '🌙', category: 'nature', speechText: 'lua' },
+        { id: 'star', name: 'Estrela', icon: '⭐', category: 'nature', speechText: 'estrela' },
+        { id: 'rain', name: 'Chuva', icon: '🌧️', category: 'nature', speechText: 'chuva' },
+        { id: 'flower', name: 'Flor', icon: '🌸', category: 'nature', speechText: 'flor' },
+        { id: 'tree', name: 'Árvore', icon: '🌳', category: 'nature', speechText: 'árvore' }
+    ]
   }
 ];
