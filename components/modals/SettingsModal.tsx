@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Icon from '../common/Icon'; // O caminho já estava correto
+import Icon from '../common/Icon';
 import { BackupData, VoiceSettings, AppearanceSettings, Theme, FontSize } from '../../types'; // O caminho já estava correto
 
 interface SettingsModalProps {

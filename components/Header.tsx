@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon, { icons } from './common/Icon';
-import { ScreenView } from '../App'; // Esta importação agora funciona porque App.tsx exporta o tipo ScreenView
+import { ScreenView } from '../App';
 
 interface HeaderProps {
     activeScreen: ScreenView;
