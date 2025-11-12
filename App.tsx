@@ -5,26 +5,11 @@ import SentenceEditorScreen from './screens/SentenceEditorScreen'; // Importa a 
 import TextToSpeechScreen from './screens/TextToSpeechScreen'; // Placeholder para a tela de Texto
 import TherapistScreen from './screens/TherapistScreen'; // Placeholder para a tela de Acompanhante
 import { useLocalStorage } from './hooks';
+import { useAppearance } from './hooks/useAppearance'; // Importa o novo hook
 import { VoiceSettings, AppearanceSettings } from './types';
 
 // Define e exporta o tipo para as telas.
 export type ScreenView = 'symbols' | 'text' | 'therapist';
-
-// Função para aplicar o tema e o tamanho da fonte no body
-function useAppearance(initialSettings: AppearanceSettings): [AppearanceSettings, React.Dispatch<React.SetStateAction<AppearanceSettings>>] {
-  const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', initialSettings);
-
-  React.useEffect(() => {
-    const body = document.body;
-    // Limpa classes antigas para evitar conflitos
-    body.className = '';
-    body.classList.add(`theme-${appearance.theme}`, `font-size-${appearance.fontSize}`);
-    // Adiciona a classe de tema também ao elemento <html> para consistência
-    document.documentElement.className = appearance.theme;
-  }, [appearance]);
-
-  return [appearance, setAppearance];
-}
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
