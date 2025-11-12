@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SettingsModal } from '@/components/SettingsModal';
+import { SettingsModal } from './SettingsModal.tsx';
 import Header from '@/components/Header';
 
 // Define e exporta o tipo para as telas, resolvendo o erro de importação no Header.
