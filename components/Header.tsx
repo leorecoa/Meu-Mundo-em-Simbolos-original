@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon, { icons } from './common/Icon';
-import { ScreenView } from '../App';
+import { ScreenView } from '../App'; // Esta importação agora funciona porque App.tsx exporta o tipo ScreenView
 
 interface HeaderProps {
     activeScreen: ScreenView;
@@ -23,8 +23,8 @@ const NavButton: React.FC<{
                 onClick();
             }}
             className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${isActive
-                    ? 'bg-gradient-to-r from-primary to-brand text-white shadow-lg'
-                    : 'text-subtle hover:bg-gray-700/50'
+                ? 'bg-gradient-to-r from-primary to-brand text-white shadow-lg'
+                : 'text-subtle hover:bg-gray-700/50'
                 }`}
         >
             <Icon name={iconName} className="w-5 h-5" />
