@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import SettingsModal from './components/modals/SettingsModal';
 import Header from './components/Header';
+import SentenceEditorScreen from './screens/SentenceEditorScreen'; // Importa a tela principal
+import TextToSpeechScreen from './screens/TextToSpeechScreen'; // Placeholder para a tela de Texto
+import TherapistScreen from './screens/TherapistScreen'; // Placeholder para a tela de Acompanhante
 import { useLocalStorage } from './hooks';
 import { VoiceSettings, AppearanceSettings } from './types';
 
@@ -50,9 +53,9 @@ function App() {
 
       <main className="flex-grow p-4 text-center">
         {/* Renderiza o conteúdo com base na tela ativa */}
-        {activeScreen === 'symbols' && <div>Tela de Símbolos</div>}
-        {activeScreen === 'text' && <div>Tela de Texto</div>}
-        {activeScreen === 'therapist' && <div>Tela do Acompanhante</div>}
+        {activeScreen === 'symbols' && <SentenceEditorScreen voiceSettings={voiceSettings} />}
+        {activeScreen === 'text' && <TextToSpeechScreen />}
+        {activeScreen === 'therapist' && <TherapistScreen />}
       </main>
 
       <SettingsModal

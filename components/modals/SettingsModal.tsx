@@ -11,7 +11,7 @@ interface SettingsModalProps {
   onAppearanceSettingsChange: (settings: AppearanceSettings) => void;
 }
 
-const DEFAULT_VOICE_SETTINGS: VoiceSettings = { rate: 0.9, pitch: 1.0 };
+const DEFAULT_VOICE_SETTINGS: VoiceSettings = { rate: 0.9, pitch: 1.0, volume: 1, voice: null };
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,

@@ -43,7 +43,7 @@ export interface Session {
 }
 
 export interface Goal {
-  id:string;
+  id: string;
   text: string;
   isCompleted: boolean;
   dateAdded: string; // ISO string
@@ -53,8 +53,8 @@ export interface Goal {
 export interface VoiceSettings {
   rate: number;
   pitch: number;
-  volume?: number;
-  voice?: any;
+  volume?: number; // Adicionado para consistência
+  voice?: any; // Adicionado para consistência
 }
 
 export interface AppearanceSettings {
