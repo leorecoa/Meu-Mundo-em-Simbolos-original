@@ -5,6 +5,7 @@ import FreeTextScreen from './screens/FreeTextScreen';
 import Header from './components/Header';
 import TherapistScreen from './screens/TherapistScreen';
 import { Sentence, SymbolData } from './types';
+import FeedbackButton from './components/FeedbackButton';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
@@ -55,8 +56,8 @@ const App: React.FC = () => {
   // Update URL hash when screen changes
   useEffect(() => {
     const path = currentScreen === 'symbols' ? '/' : `/${currentScreen}`;
-    if (window.location.hash !== `#${path}`) {
-      window.location.hash = path;
+    if (globalThis.location?.hash !== `#${path}`) {
+      globalThis.location.hash = path;
     }
   }, [currentScreen]);
 
@@ -65,8 +66,8 @@ const App: React.FC = () => {
     const handleHashChange = () => {
       setCurrentScreen(getScreenFromHash());
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    globalThis.addEventListener('hashchange', handleHashChange);
+    return () => globalThis.removeEventListener('hashchange', handleHashChange);
   }, []);
 
 
@@ -101,6 +102,7 @@ const App: React.FC = () => {
       <main className="flex-grow min-h-0">
         {renderScreen()}
       </main>
+      <FeedbackButton />
     </div>
   );
 };
