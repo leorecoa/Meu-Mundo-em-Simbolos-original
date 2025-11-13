@@ -13,6 +13,37 @@ interface SettingsModalProps {
 
 const DEFAULT_VOICE_SETTINGS: VoiceSettings = { rate: 0.9, pitch: 1, volume: 1, voice: null };
 
+function handleExport() {
+  try {
+    const customSymbols = localStorage.getItem('customSymbols') || '[]';
+    const savedPhrases = localStorage.getItem('savedPhrases') || '[]';
+    const therapistGoals = localStorage.getItem('therapistGoals') || '[]';
+    const therapistSessions = localStorage.getItem('therapistSessions') || '[]';
+
+    const backupData: BackupData = {
+      customSymbols: JSON.parse(customSymbols),
+      savedPhrases: JSON.parse(savedPhrases),
+      therapistGoals: JSON.parse(therapistGoals),
+      therapistSessions: JSON.parse(therapistSessions),
+    };
+
+    const jsonString = JSON.stringify(backupData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const date = new Date().toISOString().slice(0, 10);
+    link.download = `meu-mundo-em-simbolos-backup-${date}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Failed to export data:", error);
+    alert("Ocorreu um erro ao exportar os dados.");
+  }
+}
+
 const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,
   onClose,
@@ -35,37 +66,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   }, []);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  function handleExport() {
-    try {
-      const customSymbols = localStorage.getItem('customSymbols') || '[]';
-      const savedPhrases = localStorage.getItem('savedPhrases') || '[]';
-      const therapistGoals = localStorage.getItem('therapistGoals') || '[]';
-      const therapistSessions = localStorage.getItem('therapistSessions') || '[]';
-
-      const backupData: BackupData = {
-        customSymbols: JSON.parse(customSymbols),
-        savedPhrases: JSON.parse(savedPhrases),
-        therapistGoals: JSON.parse(therapistGoals),
-        therapistSessions: JSON.parse(therapistSessions),
-      };
-
-      const jsonString = JSON.stringify(backupData, null, 2);
-      const blob = new Blob([jsonString], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      const date = new Date().toISOString().slice(0, 10);
-      link.download = `meu-mundo-em-simbolos-backup-${date}.json`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Failed to export data:", error);
-      alert("Ocorreu um erro ao exportar os dados.");
-    }
-  }
 
   async function handleImport(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
