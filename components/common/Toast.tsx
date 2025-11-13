@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Icon from './Icon';
+import Icon from '../common/Icon';
 
 interface ToastProps {
   message: string;
@@ -16,7 +16,7 @@ const Toast: React.FC<ToastProps> = ({ message, duration = 3000, onClose }) => {
       const timer = setTimeout(() => {
         setIsVisible(false);
         // Delay closing to allow for fade-out animation
-        setTimeout(onClose, 500); 
+        setTimeout(onClose, 500);
       }, duration);
 
       return () => clearTimeout(timer);
