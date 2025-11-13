@@ -1,7 +1,7 @@
 // ... código anterior ...
 
 return (
-  <div 
+  <div
     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
     onClick={handleBackdropClick}
     onKeyDown={handleKeyDown}
@@ -15,7 +15,7 @@ return (
           Configurações
         </h2>
         {/* ✅ BOTÃO CORRETO - substituindo a div problemática */}
-        <button 
+        <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 p-1"
           aria-label="Fechar configurações"
@@ -23,7 +23,7 @@ return (
           <X className="h-6 w-6" />
         </button>
       </div>
-      
+
       <div className="p-6 space-y-6">
         {/* ✅ BOTÕES CORRETOS - substituindo as divs problemáticas */}
         <div className="space-y-4">
@@ -34,7 +34,7 @@ return (
           >
             Exportar Dados
           </button>
-          
+
           <button
             onClick={handleImport}
             className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
@@ -42,7 +42,7 @@ return (
           >
             Importar Dados
           </button>
-          
+
           <button
             onClick={handleResetApp}
             className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
@@ -55,7 +55,7 @@ return (
         {/* Configurações de Voz */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Configurações de Voz</h3>
-          
+
           {/* ✅ EXEMPLO DE CORREÇÃO para parseFloat */}
           <div className="space-y-2">
             <label className="block text-sm font-medium">Volume</label>
