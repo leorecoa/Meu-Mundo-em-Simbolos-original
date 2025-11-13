@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from 'react';
-{
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
-}
 import Icon from './Icon';
 
 interface ToastProps {
