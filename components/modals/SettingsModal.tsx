@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Icon from '../common/Icon'; // Mantido
 import { BackupData, VoiceSettings, AppearanceSettings, FontSize } from '../../types';
 
@@ -54,20 +54,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
 
-  useEffect(() => {
-    const handleVoicesChanged = () => {
-      const availableVoices = globalThis.speechSynthesis.getVoices();
-      setVoices(availableVoices);
-    };
+  const handleVoicesChanged = useCallback(() => {
+    const availableVoices = globalThis.speechSynthesis.getVoices();
+    setVoices(availableVoices);
+  }, []);
 
+  useEffect(() => {
     globalThis.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
     handleVoicesChanged(); // Carrega as vozes imediatamente
     return () => globalThis.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
-  }, []);
+  }, [handleVoicesChanged]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  async function handleImport(event: React.ChangeEvent<HTMLInputElement>) {
+  const handleImport = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -109,9 +109,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         fileInputRef.current.value = "";
       }
     }
-  }
+  }, []);
 
-  function handleResetApp() {
+  const handleResetApp = useCallback(() => {
     const confirmed = globalThis.confirm(
       "ATENÇÃO: Você tem certeza que deseja resetar o aplicativo? TODOS os seus símbolos personalizados, frases salvas, metas e configurações serão permanentemente apagados. Esta ação não pode ser desfeita."
     );
@@ -130,24 +130,24 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       alert("Aplicativo resetado. A página será recarregada.");
       globalThis.location.reload();
     }
-  }
+  }, []);
 
-  function handleVoiceSettingChange(setting: keyof VoiceSettings, value: number | string) {
+  const handleVoiceSettingChange = useCallback((setting: keyof VoiceSettings, value: number | string) => {
     if (setting === 'voice') {
       const selectedVoice = voices.find(v => v.name === value) || null;
       onVoiceSettingsChange({ ...voiceSettings, voice: selectedVoice });
     } else {
       onVoiceSettingsChange({ ...voiceSettings, [setting]: value });
     }
-  }
+  }, [voices, onVoiceSettingsChange, voiceSettings]);
 
-  function handleAppearanceSettingChange<K extends keyof AppearanceSettings>(setting: K, value: AppearanceSettings[K]) {
+  const handleAppearanceSettingChange = useCallback(<K extends keyof AppearanceSettings>(setting: K, value: AppearanceSettings[K]) => {
     onAppearanceSettingsChange({ ...appearanceSettings, [setting]: value });
-  }
+  }, [appearanceSettings, onAppearanceSettingsChange]);
 
-  function resetVoiceSettings() {
+  const resetVoiceSettings = useCallback(() => {
     onVoiceSettingsChange(DEFAULT_VOICE_SETTINGS);
-  }
+  }, [onVoiceSettingsChange]);
 
   if (!isOpen) return null;
 
