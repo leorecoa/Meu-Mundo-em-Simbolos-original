@@ -36,7 +36,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleExport = () => {
+  function handleExport() {
     try {
       const customSymbols = localStorage.getItem('customSymbols') || '[]';
       const savedPhrases = localStorage.getItem('savedPhrases') || '[]';
@@ -65,9 +65,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       console.error("Failed to export data:", error);
       alert("Ocorreu um erro ao exportar os dados.");
     }
-  };
+  }
 
-  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  async function handleImport(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -109,9 +109,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         fileInputRef.current.value = "";
       }
     }
-  };
+  }
 
-  const handleResetApp = () => {
+  function handleResetApp() {
     const confirmed = globalThis.confirm(
       "ATENÇÃO: Você tem certeza que deseja resetar o aplicativo? TODOS os seus símbolos personalizados, frases salvas, metas e configurações serão permanentemente apagados. Esta ação não pode ser desfeita."
     );
@@ -130,24 +130,24 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       alert("Aplicativo resetado. A página será recarregada.");
       globalThis.location.reload();
     }
-  };
+  }
 
-  const handleVoiceSettingChange = (setting: keyof VoiceSettings, value: number | string) => {
+  function handleVoiceSettingChange(setting: keyof VoiceSettings, value: number | string) {
     if (setting === 'voice') {
       const selectedVoice = voices.find(v => v.name === value) || null;
       onVoiceSettingsChange({ ...voiceSettings, voice: selectedVoice });
     } else {
       onVoiceSettingsChange({ ...voiceSettings, [setting]: value });
     }
-  };
+  }
 
-  const handleAppearanceSettingChange = <K extends keyof AppearanceSettings>(setting: K, value: AppearanceSettings[K]) => {
+  function handleAppearanceSettingChange<K extends keyof AppearanceSettings>(setting: K, value: AppearanceSettings[K]) {
     onAppearanceSettingsChange({ ...appearanceSettings, [setting]: value });
-  };
+  }
 
-  const resetVoiceSettings = () => {
+  function resetVoiceSettings() {
     onVoiceSettingsChange(DEFAULT_VOICE_SETTINGS);
-  };
+  }
 
   if (!isOpen) return null;
 

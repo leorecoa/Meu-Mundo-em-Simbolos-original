@@ -180,5 +180,18 @@ export const categories: Category[] = [
         { id: 'flower', name: 'Flor', icon: '🌸', category: 'nature', speechText: 'flor' },
         { id: 'tree', name: 'Árvore', icon: '🌳', category: 'nature', speechText: 'árvore' }
     ]
+  },
+  {
+    id: 'clothing',
+    name: 'Roupas',
+    iconName: 'shirt', // Ícone de camisa da biblioteca Lucide
+    symbols: [
+        { id: 'shirt', name: 'Camisa', icon: '👕', category: 'clothing', speechText: 'camisa' },
+        { id: 'pants', name: 'Calças', icon: '👖', category: 'clothing', speechText: 'calças' },
+        { id: 'dress', name: 'Vestido', icon: '👗', category: 'clothing', speechText: 'vestido' },
+        { id: 'shoes', name: 'Sapatos', icon: '👟', category: 'clothing', speechText: 'sapatos' },
+        { id: 'hat', name: 'Chapéu', icon: '👒', category: 'clothing', speechText: 'chapéu' },
+        { id: 'socks', name: 'Meias', icon: '🧦', category: 'clothing', speechText: 'meias' }
+    ]
   }
 ];

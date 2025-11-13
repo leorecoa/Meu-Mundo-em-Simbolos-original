@@ -4,7 +4,7 @@ import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import TextToSpeechScreen from './screens/TextToSpeechScreen';
 import TherapistScreen from './screens/TherapistScreen';
-import { useLocalStorage } from './hooks'; // REMOVE useAppearance daqui
+import { useLocalStorage, useAppearance } from './hooks';
 import { VoiceSettings, AppearanceSettings } from './types';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
@@ -12,18 +12,14 @@ export type ScreenView = 'symbols' | 'text' | 'therapist';
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
-  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', { 
-    rate: 0.9, 
-    pitch: 1.0, 
-    volume: 1, 
-    voice: null 
+  const [voiceSettings, setVoiceSettings] = useLocalStorage<VoiceSettings>('voiceSettings', {
+    rate: 0.9,
+    pitch: 1.0,
+    volume: 1,
+    voice: null
   });
-  
-  // CORREÇÃO: Use useLocalStorage para appearance também
-  const [appearance, setAppearance] = useLocalStorage<AppearanceSettings>('appearanceSettings', { 
-    theme: 'dark', 
-    fontSize: 'md' 
-  });
+
+  const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);

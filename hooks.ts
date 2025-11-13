@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AppearanceSettings } from './types';
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -83,4 +84,21 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, React.Disp
   }, [key, initialValue]);
 
   return [storedValue, setValue];
+}
+
+export function useAppearance(initialSettings: AppearanceSettings): [AppearanceSettings, (settings: AppearanceSettings) => void] {
+  const [settings, setSettings] = useLocalStorage<AppearanceSettings>('appearanceSettings', initialSettings);
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    
+    // Gerencia o tema
+    root.classList.remove('light', 'dark');
+    root.classList.add(settings.theme);
+
+    // Gerencia o tamanho da fonte
+    document.body.style.fontSize = `var(--font-size-${settings.fontSize})`;
+  }, [settings]);
+
+  return [settings, setSettings];
 }
