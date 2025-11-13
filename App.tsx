@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SettingsModal from './components/modals/SettingsModal';
+import { SettingsModal } from './components/modals/SettingsModal';
 import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import TextToSpeechScreen from './screens/TextToSpeechScreen';
