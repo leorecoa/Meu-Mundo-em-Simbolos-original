@@ -12,7 +12,6 @@ function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
   const { settings: voiceSettings, updateSettings: onVoiceSettingsChange } = useVoiceSettings();
-
   const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
 
   const openModal = () => setModalOpen(true);
