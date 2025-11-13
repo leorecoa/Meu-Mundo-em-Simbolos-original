@@ -9,13 +9,13 @@ import { useAppearance, useVoiceSettings } from './hooks';
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
 function App() {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
   const { settings: voiceSettings, updateSettings: onVoiceSettingsChange } = useVoiceSettings();
   const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className="flex flex-col h-screen bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
