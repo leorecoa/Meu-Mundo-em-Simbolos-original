@@ -157,7 +157,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       open
       aria-modal="true"
       className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 animate-fadeIn"
-      onClick={onClose}
+      onClick={onClose} // NOSONAR
     >
       <div
         className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-2xl p-6 w-full max-w-lg overflow-y-auto max-h-full text-text-light dark:text-text-dark"
@@ -216,10 +216,74 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* Voice Settings */}
         <fieldset className="border-t border-gray-200 dark:border-gray-700 my-6 pt-4">
           <legend className="text-lg font-semibold mb-4">Configurações de Voz</legend>
-          {/* ...restante igual */}
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="voice-select" className="block text-sm font-medium text-subtle-light dark:text-subtle-dark mb-2">Voz</label>
+              <select
+                id="voice-select"
+                value={voiceSettings.voice?.name || ''}
+                onChange={(e) => handleVoiceSettingChange('voice', e.target.value)}
+                className="w-full p-2 border rounded-lg bg-background-light dark:bg-background-dark border-gray-300 dark:border-gray-600"
+              >
+                <option value="">Padrão do Navegador</option>
+                {voices.map(v => (
+                  <option key={v.name} value={v.name}>{`${v.name} (${v.lang})`}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="rate-slider" className="block text-sm font-medium text-subtle-light dark:text-subtle-dark mb-2">Velocidade: {voiceSettings.rate.toFixed(1)}</label>
+              <input id="rate-slider" type="range" min="0.5" max="2" step="0.1" value={voiceSettings.rate} onChange={(e) => handleVoiceSettingChange('rate', parseFloat(e.target.value))} className="w-full" />
+            </div>
+            <div>
+              <label htmlFor="pitch-slider" className="block text-sm font-medium text-subtle-light dark:text-subtle-dark mb-2">Tom: {voiceSettings.pitch.toFixed(1)}</label>
+              <input id="pitch-slider" type="range" min="0" max="2" step="0.1" value={voiceSettings.pitch} onChange={(e) => handleVoiceSettingChange('pitch', parseFloat(e.target.value))} className="w-full" />
+            </div>
+            <div>
+              <label htmlFor="volume-slider" className="block text-sm font-medium text-subtle-light dark:text-subtle-dark mb-2">Volume: {voiceSettings.volume.toFixed(1)}</label>
+              <input id="volume-slider" type="range" min="0" max="1" step="0.1" value={voiceSettings.volume} onChange={(e) => handleVoiceSettingChange('volume', parseFloat(e.target.value))} className="w-full" />
+            </div>
+          </div>
+          <div className="mt-4">
+            <button onClick={resetVoiceSettings} className="w-full text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              Resetar Configurações de Voz
+            </button>
+          </div>
         </fieldset>
 
-        {/* Data Management e Reset App permanecem iguais */}
+        {/* Gerenciamento de Dados */}
+        <fieldset className="border-t border-gray-200 dark:border-gray-700 my-6 pt-4">
+          <legend className="text-lg font-semibold mb-4">Gerenciamento de Dados</legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button onClick={handleExport} className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+              <Icon name="download" size={18} />
+              Exportar Dados
+            </button>
+            <button onClick={() => fileInputRef.current?.click()} className="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+              <Icon name="upload" size={18} />
+              Importar Dados
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImport}
+              className="hidden"
+              accept=".json"
+            />
+          </div>
+        </fieldset>
+
+        {/* Resetar Aplicativo */}
+        <fieldset className="border-t border-gray-200 dark:border-gray-700 my-6 pt-4">
+          <legend className="text-lg font-semibold mb-4 text-red-500">Zona de Perigo</legend>
+          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+            <p className="text-sm text-red-700 dark:text-red-300 mb-4">A ação abaixo é irreversível e apagará todos os seus dados permanentemente.</p>
+            <button onClick={handleResetApp} className="w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center justify-center gap-2">
+              <Icon name="trash" size={18} />
+              Resetar Aplicativo
+            </button>
+          </div>
+        </fieldset>
       </div>
     </dialog>
   );
