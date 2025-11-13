@@ -4,7 +4,7 @@ import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import TextToSpeechScreen from './screens/TextToSpeechScreen';
 import TherapistScreen from './screens/TherapistScreen';
-import { useAppearance, useVoiceSettings } from './hooks/index';
+import { useAppearance, useVoiceSettings } from './hooks';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
