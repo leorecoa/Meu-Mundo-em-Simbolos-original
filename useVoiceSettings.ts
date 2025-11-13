@@ -19,7 +19,6 @@ export const useVoiceSettings = () => {
         const handleVoicesChanged = () => {
             const availableVoices = globalThis.speechSynthesis.getVoices();
             setVoices(availableVoices);
-            // A lógica para definir a voz padrão foi movida para cá para evitar loops
             if (!settings.voice && availableVoices.length > 0) {
                 const defaultVoice = availableVoices.find(v => v.lang.startsWith('pt-BR')) || availableVoices[0];
                 updateSettings({ voice: defaultVoice });
@@ -27,13 +26,12 @@ export const useVoiceSettings = () => {
         };
 
         globalThis.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
-        handleVoicesChanged(); // Chamada inicial
+        handleVoicesChanged();
 
         return () => {
             globalThis.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
         };
     }, [settings.voice, updateSettings]);
-
 
     return { settings, voices, updateSettings };
 };
