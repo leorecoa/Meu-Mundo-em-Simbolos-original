@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Icon from '../common/Icon';
+import Icon from './Icon';
 
 interface ToastProps {
   message: string;
