@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { AppearanceSettings, VoiceSettings } from '../../types';
-import Icon from '../common/Icon';
-import { useBackup } from '../../hooks/useBackup';
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { AppearanceSettings, VoiceSettings } from "../../types";
+import { useBackup } from '@/hooks/useBackup';
+import Icon from "../common/Icon";
 
 export interface SettingsModalProps {
   isOpen: boolean;
@@ -24,7 +24,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { exportData, importData, resetApp } = useBackup();
+  const { isExporting, isImporting, error, success, exportData, importData, resetApp } = useBackup();
 
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
 

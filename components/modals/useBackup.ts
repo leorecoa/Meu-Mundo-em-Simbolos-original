@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useLocalStorage } from './useLocalStorage';
-import { SymbolData, Sentence, Goal, Session, BackupData } from './types';
-import { categories } from './constants';
+import { useLocalStorage } from '../../useLocalStorage';
+import { SymbolData, Sentence, Goal, Session, BackupData } from '../../types';
+import { categories } from '../../constants';
 
 export const useBackup = () => {
   const [customSymbols, setCustomSymbols] = useLocalStorage<SymbolData[]>('customSymbols', []);
@@ -35,16 +35,3 @@ export const useBackup = () => {
 
   return { exportData, importData };
 };
-
-export const useSymbols = () => {
-  const [customSymbols, setCustomSymbols] = useLocalStorage<SymbolData[]>('customSymbols', []);
-
-  const allSymbols = [...categories.flatMap(cat => cat.symbols), ...customSymbols];
-
-  const addCustomSymbol = (symbol: Omit<SymbolData, 'id' | 'isCustom'>) => {
-    const newSymbol: SymbolData = {
-      ...symbol,
-      id: `custom-${Date.now()}`,
-      isCustom: true,
-    };
-    set
