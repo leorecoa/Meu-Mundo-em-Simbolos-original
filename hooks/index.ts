@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useLocalStorage } from '../useLocalStorage';
 import { SymbolData, Sentence, Goal, Session, AppearanceSettings, VoiceSettings, BackupData } from '../types';
 import { categories as predefinedCategories } from '../constants';
@@ -65,26 +65,51 @@ export const useVoiceSettings = () => {
         rate: 1,
         volume: 1,
     });
+    const hasSetDefaultVoice = useRef(false);
 
     const updateSettings = useCallback((newSettings: Partial<VoiceSettings>) => {
         setSettings(prev => ({ ...prev, ...newSettings }));
     }, [setSettings]);
 
     useEffect(() => {
+        if (typeof window === 'undefined' || !window.speechSynthesis) {
+            return;
+        }
+
         const handleVoicesChanged = () => {
-            const availableVoices = globalThis.speechSynthesis.getVoices();
-            setVoices(availableVoices);
-            if (!settings.voice && availableVoices.length > 0) {
-                const defaultVoice = availableVoices.find(v => v.lang.startsWith('pt-BR')) || availableVoices[0];
-                updateSettings({ voice: defaultVoice });
+            try {
+                const availableVoices = window.speechSynthesis.getVoices();
+                if (availableVoices && availableVoices.length > 0) {
+                    setVoices(availableVoices);
+                    // Only set default voice once if no voice is currently set
+                    if (!hasSetDefaultVoice.current) {
+                        setSettings(prev => {
+                            if (!prev.voice) {
+                                const defaultVoice = availableVoices.find(v => v.lang.startsWith('pt-BR')) || availableVoices[0];
+                                if (defaultVoice) {
+                                    hasSetDefaultVoice.current = true;
+                                    return { ...prev, voice: defaultVoice };
+                                }
+                            }
+                            return prev;
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading voices:', error);
             }
         };
 
-        globalThis.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
+        window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
         handleVoicesChanged(); // Call it once to load voices initially
 
-        return () => globalThis.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
-    }, [settings.voice, updateSettings]);
+        return () => {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
+            }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Only run once on mount
 
     return { settings, voices, updateSettings };
 };
