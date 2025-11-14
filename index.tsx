@@ -28,10 +28,23 @@ if (!rootElement) {
 }
 
 const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
-);
+
+try {
+  root.render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+} catch (error) {
+  console.error('Error rendering app:', error);
+  // Fallback render without ErrorBoundary if there's an issue
+  root.render(
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h1>Erro ao carregar aplicativo</h1>
+      <p>Por favor, recarregue a página.</p>
+      <button onClick={() => window.location.reload()}>Recarregar</button>
+    </div>
+  );
+}

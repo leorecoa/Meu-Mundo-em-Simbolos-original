@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { AppearanceSettings, VoiceSettings } from "@/types";
-import { useBackup, useAppearance, useVoiceSettings } from "@/hooks/index";
-import Icon from "@/components/common/Icon";
-import Toast from "@/components/common/Toast";
+import { AppearanceSettings, VoiceSettings } from "../../types";
+import { useBackup, useAppearance, useVoiceSettings } from "../../hooks";
+import Icon from "../common/Icon";
+import Toast from "../common/Toast";
 
 export interface SettingsModalProps {
   isOpen: boolean;

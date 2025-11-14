@@ -41,8 +41,8 @@ class ErrorBoundary extends Component<Props, State> {
               <details className="mt-6 text-left">
                 <summary className="cursor-pointer text-sm text-subtle">Detalhes do erro</summary>
                 <pre className="mt-2 p-4 bg-background-dark rounded text-xs overflow-auto">
-                  {this.state.error.toString()}
-                  {this.state.error.stack}
+                  {this.state.error?.toString() || 'Erro desconhecido'}
+                  {this.state.error?.stack || ''}
                 </pre>
               </details>
             )}
@@ -51,7 +51,7 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    return this.props.children || null;
   }
 }
 
