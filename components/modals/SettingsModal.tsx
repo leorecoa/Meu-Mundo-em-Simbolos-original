@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { AppearanceSettings, VoiceSettings } from "@/types";
-import { useBackup } from '@/hooks/useBackup';
-import { useAppearance, useVoiceSettings } from "@/hooks/index";
+import { useBackup, useAppearance, useVoiceSettings } from "@/hooks/index";
 import Icon from "@/components/common/Icon";
 import Toast from "@/components/common/Toast";
 

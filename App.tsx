@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SettingsModal from './components/modals/SettingsModal';
 import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import TextToSpeechScreen from './screens/TextToSpeechScreen';
 import TherapistScreen from './screens/TherapistScreen';
-import { useAppearance, useVoiceSettings } from './hooks/index';
+import { useAppearance, useVoiceSettings } from './hooks';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
@@ -13,6 +13,16 @@ function App() {
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
   const { settings: voiceSettings } = useVoiceSettings();
   const [appearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
+
+  // Aplicar tema dark/light no HTML
+  useEffect(() => {
+    const root = document.documentElement;
+    if (appearance.theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [appearance.theme]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
