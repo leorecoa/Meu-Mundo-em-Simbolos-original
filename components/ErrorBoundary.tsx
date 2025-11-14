@@ -10,21 +10,24 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+    };
+  }
 
-  public static getDerivedStateFromError(error: Error | unknown): State {
+  static getDerivedStateFromError(error: Error | unknown): State {
     const errorObj = error instanceof Error ? error : new Error(String(error));
     return { hasError: true, error: errorObj };
   }
 
-  public componentDidCatch(error: Error | unknown, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error | unknown, errorInfo: ErrorInfo) {
     const errorObj = error instanceof Error ? error : new Error(String(error));
     console.error('ErrorBoundary caught error:', errorObj, errorInfo);
   }
 
-  public render() {
+  render() {
     if (this.state.hasError) {
       return (
         <div className="flex items-center justify-center h-screen bg-background-dark text-text-light p-4">
@@ -34,6 +37,7 @@ class ErrorBoundary extends Component<Props, State> {
               Ocorreu um erro inesperado. Por favor, recarregue a página.
             </p>
             <button
+              type="button"
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
             >

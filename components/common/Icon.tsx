@@ -45,8 +45,27 @@ export const icons = {
 };
 
 const Icon = ({ name, ...props }: { name: keyof typeof icons } & LucideProps) => {
+  if (!name) {
+    console.warn('Icon name is missing');
+    return <span {...props} style={{ display: 'inline-block', width: props.size || 24, height: props.size || 24, ...props.style }} />;
+  }
+  
   const LucideIcon = icons[name];
-  return <LucideIcon {...props} />;
+  if (!LucideIcon) {
+    console.warn(`Icon "${String(name)}" not found, using fallback`);
+    return <span {...props} style={{ display: 'inline-block', width: props.size || 24, height: props.size || 24, ...props.style }} />;
+  }
+  
+  try {
+    const iconElement = <LucideIcon {...props} />;
+    if (!iconElement) {
+      return <span {...props} style={{ display: 'inline-block', width: props.size || 24, height: props.size || 24, ...props.style }} />;
+    }
+    return iconElement;
+  } catch (error) {
+    console.error(`Error rendering icon "${String(name)}":`, error);
+    return <span {...props} style={{ display: 'inline-block', width: props.size || 24, height: props.size || 24, ...props.style }} />;
+  }
 };
 
 export default Icon;

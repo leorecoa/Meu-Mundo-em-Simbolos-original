@@ -32,9 +32,7 @@ const root = ReactDOM.createRoot(rootElement);
 console.log('Rendering app...');
 
 root.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
 );
