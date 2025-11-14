@@ -4,15 +4,15 @@ import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen';
 import TextToSpeechScreen from './screens/TextToSpeechScreen';
 import TherapistScreen from './screens/TherapistScreen';
-import { useAppearance, useVoiceSettings } from './hooks';
+import { useAppearance, useVoiceSettings } from './hooks/index';
 
 export type ScreenView = 'symbols' | 'text' | 'therapist';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState<ScreenView>('symbols');
-  const { settings: voiceSettings, updateSettings: onVoiceSettingsChange } = useVoiceSettings();
-  const [appearance, setAppearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
+  const { settings: voiceSettings } = useVoiceSettings();
+  const [appearance] = useAppearance({ theme: 'dark', fontSize: 'md' });
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -32,10 +32,6 @@ function App() {
       <SettingsModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        voiceSettings={voiceSettings}
-        onVoiceSettingsChange={onVoiceSettingsChange}
-        appearanceSettings={appearance}
-        onAppearanceSettingsChange={setAppearance}
       />
     </div>
   );

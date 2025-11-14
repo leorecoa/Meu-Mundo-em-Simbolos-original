@@ -1,47 +1,29 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { AppearanceSettings, VoiceSettings } from "../../types";
+import { AppearanceSettings, VoiceSettings } from "@/types";
 import { useBackup } from '@/hooks/useBackup';
-import Icon from "../common/Icon";
+import { useAppearance, useVoiceSettings } from "@/hooks/index";
+import Icon from "@/components/common/Icon";
+import Toast from "@/components/common/Toast";
 
 export interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  voiceSettings: VoiceSettings;
-  onVoiceSettingsChange: (newSettings: Partial<VoiceSettings>) => void;
-  appearanceSettings: AppearanceSettings;
-  onAppearanceSettingsChange: (settings: AppearanceSettings) => void;
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,
   onClose,
-  voiceSettings,
-  onVoiceSettingsChange,
-  appearanceSettings,
-  onAppearanceSettingsChange,
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { isExporting, isImporting, error, success, exportData, importData, resetApp } = useBackup();
+  const { settings: voiceSettings, updateSettings: onVoiceSettingsChange, voices } = useVoiceSettings();
+  const [appearanceSettings, onAppearanceSettingsChange] = useAppearance({ theme: 'dark', fontSize: 'md' });
 
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const { isExporting, isImporting, error, success, exportData, importData, resetApp, clearMessages } = useBackup();
 
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = globalThis.speechSynthesis.getVoices();
-      const ptBRVoices = availableVoices.filter(v => v.lang.startsWith('pt-BR'));
-      setVoices(ptBRVoices);
-    };
-    loadVoices();
-    globalThis.speechSynthesis.onvoiceschanged = loadVoices;
-    return () => {
-      globalThis.speechSynthesis.onvoiceschanged = null;
-    };
-  }, []);
-
-  // ✅ Gerenciamento de Foco e estado do modal
+  // Gerenciamento de Foco e estado do modal
   useEffect(() => {
     const dialog = dialogRef.current;
     if (dialog) {
@@ -106,6 +88,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       onClick={handleBackdropClick} // O backdrop do <dialog> não é clicável por padrão
       onClose={onClose}
     >
+      {/* Componente Toast para feedback */}
+      <Toast message={success} type="success" onClose={clearMessages} />
+      <Toast message={error} type="error" onClose={clearMessages} />
+
       <div
         className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-2xl p-6 w-full max-w-lg overflow-y-auto max-h-full text-text-light dark:text-text-dark"
       >
@@ -122,7 +108,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           </button>
         </div>
 
-        {/* ✅ Agrupamento semântico com fieldset e legend */}
+        {/* Agrupamento semântico com fieldset e legend */}
         <fieldset className="border-t border-gray-200 dark:border-gray-700 my-6 pt-4">
           <legend className="text-lg font-semibold mb-4">Aparência</legend>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -196,13 +182,17 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         <fieldset className="border-t border-gray-200 dark:border-gray-700 my-6 pt-4">
           <legend className="text-lg font-semibold mb-4">Gerenciamento de Dados</legend>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <button onClick={handleExport} className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            <button onClick={handleExport} disabled={isExporting} className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50">
               <Icon name="download" size={18} />
-              Exportar Dados
+              {isExporting ? 'Exportando...' : 'Exportar Dados'}
             </button>
-            <button onClick={() => fileInputRef.current?.click()} className="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+            <button 
+              onClick={() => fileInputRef.current?.click()} 
+              disabled={isImporting} 
+              className="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
+            >
               <Icon name="upload" size={18} />
-              Importar Dados
+              {isImporting ? 'Importando...' : 'Importar Dados'}
             </button>
             <input
               type="file"
