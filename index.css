@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark;
   }
