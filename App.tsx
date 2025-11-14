@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SettingsModal from './components/modals/SettingsModal';
 import Header from './components/Header';
 import SentenceEditorScreen from './screens/SentenceEditorScreen';
-import TextToSpeechScreen from './screens/TextToSpeechScreen';
+import FreeTextScreen from './screens/FreeTextScreen';
 import TherapistScreen from './screens/TherapistScreen';
 import { useAppearance, useVoiceSettings } from './hooks';
 
@@ -36,7 +36,7 @@ function App() {
       />
       <div className="flex-grow p-4 text-center">
         {activeScreen === 'symbols' && <SentenceEditorScreen voiceSettings={voiceSettings} />}
-        {activeScreen === 'text' && <TextToSpeechScreen />}
+        {activeScreen === 'text' && <FreeTextScreen voiceSettings={voiceSettings} />}
         {activeScreen === 'therapist' && <TherapistScreen />}
       </div>
       <SettingsModal

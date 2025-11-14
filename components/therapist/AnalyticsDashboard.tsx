@@ -59,14 +59,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ savedPhrases, c
         };
     }, [savedPhrases, allSymbols]);
 
-    // FIX: The sort function was causing a type error with parameter destructuring.
-    // Using direct array access helps TypeScript correctly infer the types.
-    // FIX: Add explicit types to sort callback parameters to resolve type inference issues.
-    const topCategories = Object.entries(stats.categoryUsage).sort((a: [string, number], b: [string, number]) => b[1] - a[1]).slice(0, 5);
-    // FIX: The sort function was causing a type error with parameter destructuring.
-    // Using direct array access helps TypeScript correctly infer the types.
-    // FIX: Add explicit types to sort callback parameters to resolve type inference issues.
-    const topSymbols = Object.entries(stats.symbolUsage).sort((a: [string, number], b: [string, number]) => b[1] - a[1]).slice(0, 5);
+        const topCategories = Object.entries(stats.categoryUsage).sort((a: [string, number], b: [string, number]) => b[1] - a[1]).slice(0, 5);
+        const topSymbols = Object.entries(stats.symbolUsage).sort((a: [string, number], b: [string, number]) => b[1] - a[1]).slice(0, 5);
     
     const handlePrint = () => {
         window.print();
